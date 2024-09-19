@@ -1,5 +1,5 @@
 import Foundation
-//@testable import swift_tree
+@testable import swift_tree
 
 extension RedBlackTree {
     

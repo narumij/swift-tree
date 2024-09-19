@@ -20,28 +20,28 @@ final class RedBlackTreeSetTests: XCTestCase {
     }
 
     func testInitEmtpy() throws {
-        var set = RedBlackTreeSet<Int>()
+        let set = RedBlackTreeSet<Int>()
         XCTAssertEqual(set.elements, [])
         XCTAssertEqual(set._count, 0)
         XCTAssertTrue(set.isEmpty)
     }
     
     func testInitRange() throws {
-        var set = RedBlackTreeSet<Int>(0 ..< 10000)
+        let set = RedBlackTreeSet<Int>(0 ..< 10000)
         XCTAssertEqual(set.elements, (0 ..< 10000) + [])
         XCTAssertEqual(set._count, 10000)
         XCTAssertFalse(set.isEmpty)
     }
     
     func testInitCollection1() throws {
-        var set = RedBlackTreeSet<Int>(0 ..< 10000)
+        let set = RedBlackTreeSet<Int>(0 ..< 10000)
         XCTAssertEqual(set.elements, (0 ..< 10000) + [])
         XCTAssertEqual(set._count, 10000)
         XCTAssertFalse(set.isEmpty)
     }
     
     func testInitCollection2() throws {
-        var set = RedBlackTreeSet<Int>([2,3,3,0,0,1,1,1])
+        let set = RedBlackTreeSet<Int>([2,3,3,0,0,1,1,1])
         XCTAssertEqual(set.elements, [0,1,2,3])
         XCTAssertEqual(set._count, 4)
         XCTAssertFalse(set.isEmpty)
@@ -226,9 +226,8 @@ final class RedBlackTreeSetTests: XCTestCase {
         XCTAssertEqual(set.elements, [])
     }
     
-#if false
     func test_LE_GE() throws {
-        var set = SortedSet<Int>([0,1,2,3,4])
+        var set = RedBlackTreeSet<Int>([0,1,2,3,4])
         XCTAssertEqual(set._count, 5)
         XCTAssertEqual(set.le(-1), nil)
         XCTAssertEqual(set.ge(-1), 0)
@@ -248,7 +247,7 @@ final class RedBlackTreeSetTests: XCTestCase {
         XCTAssertEqual(set.remove(3), true)
         XCTAssertEqual(set.remove(1), false)
         XCTAssertEqual(set.remove(3), false)
-        XCTAssertEqual(set.buckets.flatMap{$0}, [0,2,4])
+        XCTAssertEqual(set.elements, [0,2,4])
         XCTAssertEqual(set.le(-1), nil)
         XCTAssertEqual(set.ge(-1), 0)
         XCTAssertEqual(set.le(0), 0)
@@ -267,7 +266,7 @@ final class RedBlackTreeSetTests: XCTestCase {
         XCTAssertEqual(set.remove(1), false)
         XCTAssertEqual(set.remove(2), false)
         XCTAssertEqual(set.remove(3), false)
-        XCTAssertEqual(set.buckets.flatMap{$0}, [0,4])
+        XCTAssertEqual(set.elements, [0,4])
         XCTAssertEqual(set.le(-1), nil)
         XCTAssertEqual(set.ge(-1), 0)
         XCTAssertEqual(set.le(0), 0)
@@ -301,9 +300,8 @@ final class RedBlackTreeSetTests: XCTestCase {
         XCTAssertEqual(set.ge(4), nil)
         XCTAssertEqual(set.le(5), nil)
         XCTAssertEqual(set.ge(5), nil)
-        XCTAssertEqual(set.buckets.flatMap{$0}, [])
+        XCTAssertEqual(set.elements, [])
     }
-#endif
 
     func testLeftRight() throws {
         var set = RedBlackTreeSet<Int>([0,1,2,3,4])
@@ -390,13 +388,26 @@ final class RedBlackTreeSetTests: XCTestCase {
         XCTAssertEqual(set.elements, [])
     }
 
+    func testMinMax() throws {
+        let set = RedBlackTreeSet<Int>([5,2,3,1,0])
+        XCTAssertEqual(set.max(), 5)
+        XCTAssertEqual(set.min(), 0)
+    }
+
+    func testSequence() throws {
+        let set = RedBlackTreeSet<Int>([5,2,3,1,0])
+        XCTAssertEqual(set.map{ $0 }, [0,1,2,3,5])
+    }
+
+#if false
     func testArrayAccess() throws {
-        var set = RedBlackTreeSet<Int>([0,1,2,3,4])
+        let set = RedBlackTreeSet<Int>([0,1,2,3,4])
         XCTAssertEqual(set[0], 0)
         XCTAssertEqual(set[1], 1)
         XCTAssertEqual(set[2], 2)
         XCTAssertEqual(set[3], 3)
         XCTAssertEqual(set[4], 4)
     }
+#endif
 }
 #endif

@@ -1,9 +1,10 @@
 import Foundation
 
 @usableFromInline
-protocol RefImpl: MemberSetProtocol { }
+protocol RefImpl: MemberProtocol { }
 
 extension RefImpl {
+    
     @inlinable
     func __ref_(_ rhs: _NodeRef) -> _NodePtr {
         switch rhs {
@@ -15,6 +16,22 @@ extension RefImpl {
             return __left_(basePtr)
         }
     }
+
+    @inlinable
+    func __left_ref(_ p: _NodePtr) -> _NodeRef {
+        .__left_(p)
+    }
+    
+    @inlinable
+    func __right_ref(_ p: _NodePtr) -> _NodeRef {
+        .__right_(p)
+    }
+}
+
+@usableFromInline
+protocol RefSetImpl: MemberSetProtocol & RefImpl { }
+
+extension RefSetImpl {
     
     @inlinable
     func __ref_(_ lhs: _NodeRef,_ rhs: _NodePtr) {
@@ -28,15 +45,6 @@ extension RefImpl {
         }
     }
 
-    @inlinable
-    func __left_ref(_ p: _NodePtr) -> _NodeRef {
-        .__left_(p)
-    }
-    
-    @inlinable
-    func __right_ref(_ p: _NodePtr) -> _NodeRef {
-        .__right_(p)
-    }
 }
 
 @usableFromInline

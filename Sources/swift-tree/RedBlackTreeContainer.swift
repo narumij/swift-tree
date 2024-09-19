@@ -58,6 +58,12 @@ extension RedBlackTree.Container {
 }
 
 extension RedBlackTree.Container {
+    
+    @inlinable
+    var __begin_node: _NodePtr {
+        header.__begin_node
+    }
+    
     @inlinable
     mutating func __construct_node(_ k: Element) -> _NodePtr {
         if let stock = stock.popLast() {
@@ -94,9 +100,6 @@ extension RedBlackTree.Container {
             return __left_(basePtr)
         }
     }
-    
-    @inlinable
-    func end() -> _NodePtr { .end }
     
     @inlinable
     mutating func __find_equal(_ __parent: inout _NodePtr, _ __v: Element) -> _NodeRef {

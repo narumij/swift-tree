@@ -3,7 +3,7 @@ import Foundation
 @usableFromInline
 protocol NodeInsertProtocol
 : MemberSetProtocol
-& RefProtocol
+& RefSetProtocol
 & SizeProtocol
 & BeginNodeProtocol
 & EndNodeProtocol

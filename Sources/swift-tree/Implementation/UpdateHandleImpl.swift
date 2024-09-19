@@ -1,7 +1,7 @@
 import Foundation
 
 @usableFromInline
-protocol UpdateHandleImpl: RefImpl & RootImpl & RootPtrImpl {
+protocol UpdateHandleImpl: RefSetImpl & RootImpl & RootPtrImpl {
     associatedtype Element
     var __header_ptr: UnsafeMutablePointer<RedBlackTree.Header> { get }
     var __node_ptr: UnsafeMutablePointer<RedBlackTree.Node>{ get }

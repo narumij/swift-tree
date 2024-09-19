@@ -22,3 +22,4 @@ struct _UnsafeReadHandle<Element: Comparable> {
 }
 
 extension _UnsafeReadHandle: ReadHandleImpl { }
+extension _UnsafeReadHandle: NodeFindProtocol & NodeFindEtcProtocol & FindLeafEtcProtocol { }

@@ -1,21 +1,83 @@
 import Foundation
 
 @usableFromInline
-protocol NodeFindProtocol
+protocol FindLeafEtcProtocol
 : ValueProtocol
 & RootProtocol
-& EndNodeProtocol
-& EndProtocol
-{ }
+& RefProtocol
+& EndNodeProtocol { }
+
+extension FindLeafEtcProtocol {
+    
+    @inlinable
+    func
+    __find_leaf_low(_ __parent: inout _NodePtr, _ __v: Element) -> _NodeRef
+    {
+        var __nd: _NodePtr = __root();
+        if __nd != .nullptr {
+            while true {
+                if value_comp(__value_(__nd), __v) {
+                    if __right_(__nd) != .nullptr {
+                        __nd = __right_(__nd); }
+                    else {
+                        __parent = __nd;
+                        return __right_ref(__nd);
+                    }
+                } else {
+                    if __left_(__nd) != .nullptr {
+                        __nd = __left_(__nd); }
+                    else {
+                        __parent = __nd;
+                        return __left_ref(__parent);
+                    }
+                }
+            }
+        }
+        __parent = __end_node();
+        return __left_ref(__parent);
+    }
+    
+    @inlinable
+    func
+    __find_leaf_high(_ __parent: inout _NodePtr, _ __v: Element) -> _NodeRef
+    {
+        var __nd: _NodePtr = __root()
+        if __nd != .nullptr {
+            while true
+            {
+                if value_comp(__v, __value_(__nd))
+                {
+                    if __left_(__nd) != .nullptr {
+                        __nd = __left_(__nd) }
+                    else {
+                        __parent = __nd
+                        return __left_ref(__parent)
+                    }
+                }
+                else
+                {
+                    if __right_(__nd) != .nullptr {
+                        __nd = __right_(__nd) }
+                    else {
+                        __parent = __nd
+                        return __right_ref(__nd)
+                    }
+                }
+            }
+        }
+        __parent = __end_node()
+        return __left_ref(__parent)
+    }
+}
 
 @usableFromInline
 protocol NodeFindEtcProtocol
 : NodeFindProtocol
 & RefProtocol
-& RootPtrProrototol
-& EndNodeProtocol { }
+& RootPtrProrototol { }
 
 extension NodeFindEtcProtocol {
+    
     @inlinable
     @inline(__always)
     func
@@ -35,7 +97,6 @@ extension NodeFindEtcProtocol {
 extension NodeFindEtcProtocol {
     
     @inlinable
-//    @inline(__always)
     func
     __find_equal(_ __parent: inout _NodePtr, _ __v: Element) -> _NodeRef
     {
@@ -69,6 +130,14 @@ extension NodeFindEtcProtocol {
         return __left_ref(__parent)
     }
 }
+
+@usableFromInline
+protocol NodeFindProtocol
+: ValueProtocol
+& RootProtocol
+& EndNodeProtocol
+& EndProtocol
+{ }
 
 extension NodeFindProtocol {
     

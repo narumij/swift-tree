@@ -41,6 +41,10 @@ protocol RefProtocol: MemberProtocol {
     func __left_ref(_: _NodePtr) -> _NodeRef
     func __right_ref(_: _NodePtr) -> _NodeRef
     func __ref_(_ rhs: _NodeRef) -> _NodePtr
+}
+
+@usableFromInline
+protocol RefSetProtocol: RefProtocol {
     func __ref_(_ lhs: _NodeRef,_ rhs: _NodePtr)
 }
 
