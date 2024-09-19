@@ -1,44 +1,33 @@
 import Foundation
+//@testable import swift_tree
 
-@frozen
-public struct RedBlackTreeContainer<Element: Comparable> {
+extension RedBlackTree {
     
-    public init() { }
-    
-    @usableFromInline
-    var header: RedBlackTreeHeader = .init()
-    @usableFromInline
-    var nodes: [RedBlackTreeNode] = []
-    @usableFromInline
-    var values: [Element] = []
-    
-    @inlinable
-    public mutating func reserveCapacity(_ minimumCapacity: Int) {
-        nodes.reserveCapacity(minimumCapacity)
-        values.reserveCapacity(minimumCapacity)
+    public final class Storage<Element: Comparable> {
+        
+        @inlinable
+        public init() { }
+        
+        @usableFromInline
+        var header: RedBlackTree.Header = .init()
+        @usableFromInline
+        var nodes: [RedBlackTree.Node] = []
+        @usableFromInline
+        var values: [Element] = []
+        
+        @inlinable
+        public func reserveCapacity(_ minimumCapacity: Int) {
+            nodes.reserveCapacity(minimumCapacity)
+            values.reserveCapacity(minimumCapacity)
+        }
     }
 }
 
-extension RedBlackTreeContainer {
+extension RedBlackTree.Storage {
     
     @inlinable
     @inline(__always)
-    func _read<R>(_ body: (_UnsafeReadHandle<Element>) throws -> R) rethrows -> R {
-        return try withUnsafePointer(to: header) { header in
-            try nodes.withUnsafeBufferPointer { nodes in
-                try values.withUnsafeBufferPointer { values in
-                    try body(_UnsafeReadHandle<Element>(
-                        __header_ptr: header,
-                        __node_ptr: nodes.baseAddress!,
-                        __value_ptr: values.baseAddress!))
-                }
-            }
-        }
-    }
-    
-    @inlinable
-    @inline(__always)
-    mutating func _update<R>(_ body: (_UnsafeUpdateHandle<Element>) throws -> R) rethrows -> R {
+    func _update<R>(_ body: (_UnsafeUpdateHandle<Element>) throws -> R) rethrows -> R {
         return try withUnsafeMutablePointer(to: &header) { header in
             try nodes.withUnsafeMutableBufferPointer { nodes in
                 try values.withUnsafeMutableBufferPointer { values in
@@ -52,9 +41,10 @@ extension RedBlackTreeContainer {
     }
 }
 
-extension RedBlackTreeContainer {
+extension RedBlackTree.Storage {
+    
     @inlinable
-    mutating func __construct_node(_ k: Element) -> _NodePtr {
+    func __construct_node(_ k: Element) -> _NodePtr {
         let n = values.count
         nodes.append(.init(__is_black_: false, __left_: .nullptr, __right_: .nullptr, __parent_: .nullptr))
         values.append(k)
@@ -62,7 +52,7 @@ extension RedBlackTreeContainer {
     }
     
     @inlinable
-    mutating func destroy(_ p: _NodePtr) {
+    func destroy(_ p: _NodePtr) {
         //        fatalError()
         nodes[p].clear()
     }
@@ -91,38 +81,38 @@ extension RedBlackTreeContainer {
     func end() -> _NodePtr { .end }
     
     @inlinable
-    mutating func __find_equal(_ __parent: inout _NodePtr, _ __v: Element) -> _NodeRef {
+    func __find_equal(_ __parent: inout _NodePtr, _ __v: Element) -> _NodeRef {
         _update{ $0.__find_equal(&__parent, __v) }
     }
     
     @inlinable
-    mutating func __insert_node_at(_ __parent: _NodePtr, _ __child: _NodeRef, _ __new_node: _NodePtr) {
+    func __insert_node_at(_ __parent: _NodePtr, _ __child: _NodeRef, _ __new_node: _NodePtr) {
         _update{ $0.__insert_node_at(__parent, __child, __new_node) }
     }
     
     @inlinable
-    mutating func __remove_node_pointer(_ __ptr: _NodePtr) -> _NodePtr {
+    func __remove_node_pointer(_ __ptr: _NodePtr) -> _NodePtr {
         _update{ $0.__remove_node_pointer(__ptr) }
     }
     
     @inlinable
-    mutating func find(_ __v: Element) -> _NodePtr {
+    func find(_ __v: Element) -> _NodePtr {
         _update { $0.find(__v) }
     }
 }
 
-extension RedBlackTreeContainer {
+extension RedBlackTree.Storage {
     
     @inlinable
     public
-    mutating func
+    func
     __insert_unique(_ x: Element) -> (__r: _NodeRef, __inserted: Bool) {
         
         __emplace_unique_key_args(x)
     }
     
     @inlinable
-    mutating func
+    func
     __emplace_unique_key_args(_ __k: Element) -> (_NodeRef, Bool)
     {
         var __parent: _NodePtr = .nullptr
@@ -139,12 +129,12 @@ extension RedBlackTreeContainer {
 
 }
 
-extension RedBlackTreeContainer {
+extension RedBlackTree.Storage {
     
     @inlinable func
     __get_np(_ p: _NodePtr) -> _NodePtr { p }
     
-    @inlinable mutating func
+    @inlinable func
     erase(_ __p: _NodePtr) -> _NodePtr
     {
         let __np    = __get_np(__p)
@@ -153,18 +143,7 @@ extension RedBlackTreeContainer {
         return __r
     }
     
-    @inlinable mutating func
-    erase__(_ __p: _NodePtr) -> Element?
-    {
-        var __value_ = _update { __p == .end ? nil : $0.__value_ptr[__p] }
-        let __np    = __get_np(__p)
-        let __r     = __remove_node_pointer(__np)
-        destroy(__p)
-        return __value_
-    }
-
-    
-    @inlinable mutating func
+    @inlinable func
     __erase_unique(_ __k: Element) -> Int {
         let __i = find(__k)
         if (__i == end()) {
@@ -173,5 +152,3 @@ extension RedBlackTreeContainer {
         return 1
     }
 }
-
-

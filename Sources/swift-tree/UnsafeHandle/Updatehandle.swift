@@ -6,17 +6,17 @@ struct _UnsafeUpdateHandle<Element: Comparable> {
     
     @inlinable
     @inline(__always)
-    init(__header_ptr: UnsafeMutablePointer<RedBlackTreeHeader>,
-         __node_ptr: UnsafeMutablePointer<RedBlackTreeNode>,
+    init(__header_ptr: UnsafeMutablePointer<RedBlackTree.Header>,
+         __node_ptr: UnsafeMutablePointer<RedBlackTree.Node>,
          __value_ptr: UnsafeMutablePointer<Element>) {
         self.__header_ptr = __header_ptr
         self.__node_ptr = __node_ptr
         self.__value_ptr = __value_ptr
     }
     @usableFromInline
-    let __header_ptr: UnsafeMutablePointer<RedBlackTreeHeader>
+    let __header_ptr: UnsafeMutablePointer<RedBlackTree.Header>
     @usableFromInline
-    let __node_ptr: UnsafeMutablePointer<RedBlackTreeNode>
+    let __node_ptr: UnsafeMutablePointer<RedBlackTree.Node>
     @usableFromInline
     let __value_ptr: UnsafeMutablePointer<Element>
 }

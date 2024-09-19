@@ -44,32 +44,41 @@ extension NodeInsertProtocol {
 
 
 @usableFromInline
-protocol StorageProtocol: ValueProtocol {
+protocol StorageProtocol {
+    
+    associatedtype Element
+
+    @inlinable
+    mutating func __construct_node(_ k: Element) -> _NodePtr
     
     @inlinable
-    func __construct_node(_ k: Element) -> _NodePtr
-    
-    @inlinable
-    func destroy(_ p: _NodePtr)
+    mutating func destroy(_ p: _NodePtr)
 }
 
-
 @usableFromInline
-protocol InsertUniqueProtocol: NodeFindEtcProtocol & NodeInsertProtocol & StorageProtocol { }
+protocol InsertUniqueProtocol: StorageProtocol {
+    func __ref_(_ rhs: _NodeRef) -> _NodePtr
+    mutating func
+    __find_equal(_ __parent: inout _NodePtr, _ __v: Element) -> _NodeRef
+    mutating func
+    __insert_node_at(
+        _ __parent: _NodePtr, _ __child: _NodeRef,
+        _ __new_node: _NodePtr)
+}
 
 extension InsertUniqueProtocol {
     
     @inlinable
-    func __insert_unique(_ x: Element) -> (__r: _NodeRef, __inserted: Bool) {
+    public mutating func __insert_unique(_ x: Element) -> (__r: _NodeRef, __inserted: Bool) {
         
         __emplace_unique_key_args(x)
     }
 
     @inlinable
-    func
+    mutating func
     __emplace_unique_key_args(_ __k: Element) -> (_NodeRef, Bool)
     {
-        var __parent: _NodePtr = .nullptr
+        var __parent   = _NodePtr.nullptr
         let __child    = __find_equal(&__parent, __k)
         let __r        = __child
         var __inserted = false

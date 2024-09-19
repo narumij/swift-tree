@@ -12,18 +12,16 @@ extension RedBlackTreeContainer {
     
     @inlinable
     var _count: Int {
-        mutating get {
-            var it = header.__begin_node
-            if it == .end {
-                return 0
-            }
-            var c = 0
-            repeat {
-                c += 1
-                it = _update{ $0.__tree_next_iter(it) }
-            } while it != .end
-            return c
+        var it = header.__begin_node
+        if it == .end {
+            return 0
         }
+        var c = 0
+        repeat {
+            c += 1
+            it = _read { $0.__tree_next_iter(it) }
+        } while it != .end
+        return c
     }
     
     @inlinable
@@ -34,26 +32,26 @@ extension RedBlackTreeContainer {
     
     @inlinable
     func __root() -> _NodePtr {
-        header.__left_
+        __left_
     }
     @inlinable
     mutating func __root(_ p: _NodePtr) {
-        header.__left_ = p
+        __left_ = p
     }
     @inlinable
-    mutating func
+    func
     __tree_invariant(_ __root: _NodePtr) -> Bool {
-        _update{ $0.__tree_invariant(__root) }
+        _read { $0.__tree_invariant(__root) }
     }
     @inlinable
-    mutating func
+    func
     __tree_min(_ __x: _NodePtr) -> _NodePtr {
-        _update{ $0.__tree_min(__x) }
+        _read { $0.__tree_min(__x) }
     }
     @inlinable
-    mutating func
+    func
     __tree_max(_ __x: _NodePtr) -> _NodePtr {
-        _update{ $0.__tree_max(__x) }
+        _read { $0.__tree_max(__x) }
     }
     @inlinable
     mutating func
@@ -295,7 +293,7 @@ final class RedBlackTreeContainerTests: XCTestCase {
         fixtureEmpty(&tree)
         do {
             var __parent: _NodePtr = .nullptr
-            var __k = 5
+            let __k = 5
             let __child    = tree.__find_equal(&__parent, __k)
             XCTAssertEqual(__parent, .end)
             XCTAssertEqual(__child, .__left_(.end))
@@ -303,7 +301,7 @@ final class RedBlackTreeContainerTests: XCTestCase {
         do {
             tree.__left_ = nil
             var __parent: _NodePtr = .nullptr
-            var __k = 5
+            let __k = 5
             let __child    = tree.__find_equal(&__parent, __k)
             XCTAssertEqual(__parent, .end)
             XCTAssertEqual(__child, .__left_(.end))
@@ -315,7 +313,7 @@ final class RedBlackTreeContainerTests: XCTestCase {
         fixture0_10_20(&tree)
         do {
             var __parent: _NodePtr = .nullptr
-            var __k = -1
+            let __k = -1
             let __child    = tree.__find_equal(&__parent, __k)
             XCTAssertEqual(__parent.index, __child.index)
             XCTAssertEqual(__parent, 1)
@@ -323,7 +321,7 @@ final class RedBlackTreeContainerTests: XCTestCase {
         }
         do {
             var __parent: _NodePtr = .nullptr
-            var __k = 0
+            let __k = 0
             let __child    = tree.__find_equal(&__parent, __k)
             XCTAssertNotEqual(__parent.index, __child.index)
             XCTAssertEqual(__parent, 1)
@@ -331,7 +329,7 @@ final class RedBlackTreeContainerTests: XCTestCase {
         }
         do {
             var __parent: _NodePtr = .nullptr
-            var __k = 5
+            let __k = 5
             let __child    = tree.__find_equal(&__parent, __k)
             XCTAssertEqual(__parent.index, __child.index)
             XCTAssertEqual(__parent, 1)
@@ -339,7 +337,7 @@ final class RedBlackTreeContainerTests: XCTestCase {
         }
         do {
             var __parent: _NodePtr = .nullptr
-            var __k = 10
+            let __k = 10
             let __child    = tree.__find_equal(&__parent, __k)
             XCTAssertNotEqual(__parent.index, __child.index)
             XCTAssertEqual(__parent, 0)
@@ -347,7 +345,7 @@ final class RedBlackTreeContainerTests: XCTestCase {
         }
         do {
             var __parent: _NodePtr = .nullptr
-            var __k = 15
+            let __k = 15
             let __child    = tree.__find_equal(&__parent, __k)
             XCTAssertEqual(__parent.index, __child.index)
             XCTAssertEqual(__parent, 2)
@@ -355,7 +353,7 @@ final class RedBlackTreeContainerTests: XCTestCase {
         }
         do {
             var __parent: _NodePtr = .nullptr
-            var __k = 20
+            let __k = 20
             let __child    = tree.__find_equal(&__parent, __k)
             XCTAssertNotEqual(__parent.index, __child.index)
             XCTAssertEqual(__parent, 2)
@@ -363,7 +361,7 @@ final class RedBlackTreeContainerTests: XCTestCase {
         }
         do {
             var __parent: _NodePtr = .nullptr
-            var __k = 21
+            let __k = 21
             let __child    = tree.__find_equal(&__parent, __k)
             XCTAssertEqual(__parent.index, __child.index)
             XCTAssertEqual(__parent, 2)
@@ -387,8 +385,6 @@ final class RedBlackTreeContainerTests: XCTestCase {
         
         // 分解前 1.04 sec
         // 分解後 1.82 sec (ただしリリースビルドでの速度変化なし)
-        
-        // This is an example of a performance test case.
         
         var tree = RedBlackTreeContainer<Int>()
         fixtureEmpty(&tree)

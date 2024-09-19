@@ -1,12 +1,14 @@
 import Foundation
 
-extension RedBlackTreeContainer {
+typealias RedBlackTreeContainer = RedBlackTree.Container
+
+extension RedBlackTree.Container {
     @inlinable
-    mutating func insert(_ p: Element) -> Bool {
+    public mutating func insert(_ p: Element) -> Bool {
         __insert_unique(p).__inserted
     }
     @inlinable
-    mutating func remove(_ p: Element) -> Bool {
+    public mutating func remove(_ p: Element) -> Bool {
         __erase_unique(p) == 1
     }
     @inlinable
@@ -14,7 +16,7 @@ extension RedBlackTreeContainer {
         ptr == .end ? nil : erase__(ptr)
     }
     @inlinable
-    func contains(_ p: Element) -> Bool {
+    public func contains(_ p: Element) -> Bool {
         _read {
             let it = $0.__lower_bound(p, $0.__root(), $0.__left_)
             guard it >= 0 else { return false }
@@ -22,7 +24,7 @@ extension RedBlackTreeContainer {
         }
     }
     @inlinable
-    func lt(_ p: Element) -> Element? {
+    public func lt(_ p: Element) -> Element? {
         _read {
             var it = $0.__lower_bound(p, $0.__root(), .end)
             if it == $0.__begin_node { return nil }
@@ -31,7 +33,7 @@ extension RedBlackTreeContainer {
         }
     }
     @inlinable
-    func gt(_ p: Element) -> Element? {
+    public func gt(_ p: Element) -> Element? {
         _read {
             var it = $0.__upper_bound(p, $0.__root(), .end)
             if it == .end { return nil }
@@ -55,10 +57,10 @@ extension RedBlackTreeContainer {
     }
 
     @inlinable
-    var count: Int { header.size }
+    public var count: Int { header.size }
     
     @inlinable
-    var isEmpty: Bool { count == 0 }
+    public var isEmpty: Bool { count == 0 }
     
     @inlinable
     var elements: [Element] {
@@ -108,13 +110,13 @@ extension RedBlackTreeContainer {
 
 public struct Ptr2<Element: Comparable> {
     @inlinable
-    init(container: RedBlackTreeContainer<Element>, ptr: _NodePtr, offset: Int = 0) {
+    init(container: RedBlackTree.Container<Element>, ptr: _NodePtr, offset: Int = 0) {
         self.container = container
         self.ptr = ptr
         self.offset = offset
     }
     @usableFromInline
-    var container: RedBlackTreeContainer<Element>
+    var container: RedBlackTree.Container<Element>
     @usableFromInline
     let ptr: _NodePtr
     @usableFromInline

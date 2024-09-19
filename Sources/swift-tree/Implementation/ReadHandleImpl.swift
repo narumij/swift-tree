@@ -1,10 +1,10 @@
 import Foundation
 
 @usableFromInline
-protocol ReadHandleImpl: MemberProtocol & ValueProtocol & RootImpl & EndImpl {
+protocol ReadHandleImpl: MemberProtocol & ValueProtocol & RootImpl {
     associatedtype Element
-    var __header_ptr: UnsafePointer<RedBlackTreeHeader> { get }
-    var __node_ptr: UnsafePointer<RedBlackTreeNode>{ get }
+    var __header_ptr: UnsafePointer<RedBlackTree.Header> { get }
+    var __node_ptr: UnsafePointer<RedBlackTree.Node>{ get }
     var __value_ptr: UnsafePointer<Element>{ get }
 }
 

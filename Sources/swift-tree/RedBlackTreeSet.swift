@@ -1,3 +1,3 @@
 import Foundation
 
-public typealias RedBlackTreeSet = RedBlackTreeContainer
+public typealias RedBlackTreeSet = RedBlackTree.Container

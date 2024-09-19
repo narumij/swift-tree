@@ -8,6 +8,8 @@
 import XCTest
 @testable import swift_tree
 
+typealias RedBlackTreeStorage = RedBlackTree.Storage
+
 extension RedBlackTreeStorage {
     
     @inlinable

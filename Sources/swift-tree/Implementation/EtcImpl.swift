@@ -40,7 +40,7 @@ extension RefImpl {
 }
 
 @usableFromInline
-protocol RootImpl: MemberProtocol & EndImpl { }
+protocol RootImpl: MemberProtocol & EndNodeProtocol { }
 
 extension RootImpl {
     @inlinable
@@ -49,23 +49,9 @@ extension RootImpl {
 }
 
 @usableFromInline
-protocol RootPtrImpl: RefProtocol & EndImpl { }
+protocol RootPtrImpl: RefProtocol & EndNodeProtocol { }
 
 extension RootPtrImpl {
     @inlinable
     func __root_ptr() -> _NodeRef { __left_ref(__end_node()) }
-}
-
-@usableFromInline
-protocol EndImpl { }
-
-extension EndImpl {
-    
-    @inlinable
-    @inline(__always)
-    func __end_node() -> _NodePtr { .end }
-    
-    @inlinable
-    @inline(__always)
-    func end() -> _NodePtr { .end }
 }

@@ -1,7 +1,7 @@
 import Foundation
 @testable import swift_tree
 
-extension Collection where Element == RedBlackTreeNode, Index == Int {
+extension Collection where Element == RedBlackTree.Node, Index == Int {
     
     func graphviz() -> String {
         let header = """

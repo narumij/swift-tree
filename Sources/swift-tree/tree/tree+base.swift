@@ -77,9 +77,21 @@ protocol EndNodeProtocol {
     func __end_node() -> _NodePtr
 }
 
+extension EndNodeProtocol {
+    @inlinable
+    @inline(__always)
+    func __end_node() -> _NodePtr { .end }
+}
+
 @usableFromInline
 protocol EndProtocol {
     func end() -> _NodePtr
+}
+
+extension EndProtocol {
+    @inlinable
+    @inline(__always)
+    func end() -> _NodePtr { .end }
 }
 
 @usableFromInline
