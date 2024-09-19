@@ -35,7 +35,7 @@ extension NodeFindEtcProtocol {
 extension NodeFindEtcProtocol {
     
     @inlinable
-    @inline(__always)
+//    @inline(__always)
     func
     __find_equal(_ __parent: inout _NodePtr, _ __v: Element) -> _NodeRef
     {

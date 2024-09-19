@@ -42,6 +42,7 @@ extension NodeInsertProtocol {
     }
 }
 
+
 @usableFromInline
 protocol StorageProtocol: ValueProtocol {
     
@@ -52,10 +53,11 @@ protocol StorageProtocol: ValueProtocol {
     func destroy(_ p: _NodePtr)
 }
 
-@usableFromInline
-protocol Insert2Protocol: NodeFindEtcProtocol & NodeInsertProtocol & StorageProtocol { }
 
-extension Insert2Protocol {
+@usableFromInline
+protocol InsertUniqueProtocol: NodeFindEtcProtocol & NodeInsertProtocol & StorageProtocol { }
+
+extension InsertUniqueProtocol {
     
     @inlinable
     func __insert_unique(_ x: Element) -> (__r: _NodeRef, __inserted: Bool) {

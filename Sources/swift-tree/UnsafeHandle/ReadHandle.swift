@@ -2,7 +2,7 @@ import Foundation
 
 @frozen
 @usableFromInline
-struct _UnsafeReadHandle<Element> {
+struct _UnsafeReadHandle<Element: Comparable> {
     
     @inlinable
     @inline(__always)
@@ -21,5 +21,4 @@ struct _UnsafeReadHandle<Element> {
     let __value_ptr: UnsafePointer<Element>
 }
 
-extension _UnsafeReadHandle: UnsafeReadHandleProtocol { }
-
+extension _UnsafeReadHandle: ReadHandleImpl { }

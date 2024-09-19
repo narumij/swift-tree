@@ -1,14 +1,14 @@
 import Foundation
 
 @usableFromInline
-protocol UnsafeUpdateHeaderProtocol {
+protocol UpdateHandleImpl: RefImpl & RootImpl & RootPtrImpl & EndImpl {
     associatedtype Element
     var __header_ptr: UnsafeMutablePointer<RedBlackTreeHeader> { get }
     var __node_ptr: UnsafeMutablePointer<RedBlackTreeNode>{ get }
     var __value_ptr: UnsafeMutablePointer<Element>{ get }
 }
 
-extension UnsafeUpdateHeaderProtocol {
+extension UpdateHandleImpl {
     
     @inlinable
     var __left_: _NodePtr {
@@ -29,7 +29,7 @@ extension UnsafeUpdateHeaderProtocol {
     }
 }
 
-extension UnsafeUpdateHeaderProtocol {
+extension UpdateHandleImpl {
     
     @inlinable
     @inline(__always)
@@ -56,6 +56,9 @@ extension UnsafeUpdateHeaderProtocol {
     func __parent_unsafe(_ p: _NodePtr) -> _NodePtr {
         __parent_(p)
     }
+}
+
+extension UpdateHandleImpl {
 
     @inlinable
     @inline(__always)
@@ -81,53 +84,10 @@ extension UnsafeUpdateHeaderProtocol {
     }
 }
 
-extension UnsafeUpdateHeaderProtocol {
+extension UpdateHandleImpl {
     
     @inlinable
+    @inline(__always)
     func __value_(_ p: _NodePtr) -> Element { __value_ptr[p] }
-
-    @inlinable
-    func __ref_(_ rhs: _NodeRef) -> _NodePtr {
-        switch rhs {
-        case .nullptr:
-            return .nullptr
-        case .__right_(let basePtr):
-            return __right_(basePtr)
-        case .__left_(let basePtr):
-            return __left_(basePtr)
-        }
-    }
-    
-    @inlinable
-    func __ref_(_ lhs: _NodeRef,_ rhs: _NodePtr) {
-        switch lhs {
-        case .nullptr:
-            fatalError()
-        case .__right_(let basePtr):
-            return __right_(basePtr, rhs)
-        case .__left_(let basePtr):
-            return __left_(basePtr, rhs)
-        }
-    }
-
-    @inlinable
-    func __left_ref(_ p: _NodePtr) -> _NodeRef {
-        .__left_(p)
-    }
-    @inlinable
-    func __right_ref(_ p: _NodePtr) -> _NodeRef {
-        .__right_(p)
-    }
-
-    @inlinable
-    func __root() -> _NodePtr { __left_(__end_node()) }
-
-    @inlinable
-    func __root_ptr() -> _NodeRef { __left_ref(__end_node()) }
-
-    @inlinable
-    func __end_node() -> _NodePtr { .end }
-    
-    @inlinable
-    func end() -> _NodePtr { .end }
 }
+

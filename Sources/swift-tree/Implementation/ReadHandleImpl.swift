@@ -1,35 +1,35 @@
 import Foundation
 
 @usableFromInline
-protocol UnsafeReadHandleProtocol {
+protocol ReadHandleImpl: MemberProtocol & ValueProtocol & RootImpl & EndImpl {
     associatedtype Element
     var __header_ptr: UnsafePointer<RedBlackTreeHeader> { get }
     var __node_ptr: UnsafePointer<RedBlackTreeNode>{ get }
     var __value_ptr: UnsafePointer<Element>{ get }
 }
 
-extension UnsafeReadHandleProtocol {
+extension ReadHandleImpl {
     
     @inlinable
     @inline(__always)
     var __left_: _NodePtr {
-        get { __header_ptr.pointee.__left_ }
+        __header_ptr.pointee.__left_
     }
     
     @inlinable
     @inline(__always)
     var __begin_node: _NodePtr {
-        get { __header_ptr.pointee.__begin_node }
+        __header_ptr.pointee.__begin_node
     }
     
     @inlinable
     @inline(__always)
     var size: Int {
-        get { __header_ptr.pointee.size }
+        __header_ptr.pointee.size
     }
 }
 
-extension UnsafeReadHandleProtocol {
+extension ReadHandleImpl {
     
     @inlinable
     @inline(__always)
@@ -56,4 +56,10 @@ extension UnsafeReadHandleProtocol {
     func __parent_unsafe(_ p: _NodePtr) -> _NodePtr {
         __parent_(p)
     }
+}
+
+extension ReadHandleImpl {
+    @inlinable
+    @inline(__always)
+    func __value_(_ p: _NodePtr) -> Element { __value_ptr[p] }
 }

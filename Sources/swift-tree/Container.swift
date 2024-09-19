@@ -154,6 +154,17 @@ extension RedBlackTreeContainer {
     }
     
     @inlinable mutating func
+    erase__(_ __p: _NodePtr) -> Element?
+    {
+        var __value_ = _update { __p == .end ? nil : $0.__value_ptr[__p] }
+        let __np    = __get_np(__p)
+        let __r     = __remove_node_pointer(__np)
+        destroy(__p)
+        return __value_
+    }
+
+    
+    @inlinable mutating func
     __erase_unique(_ __k: Element) -> Int {
         let __i = find(__k)
         if (__i == end()) {
@@ -163,15 +174,4 @@ extension RedBlackTreeContainer {
     }
 }
 
-extension _UnsafeUpdateHandle: MemberProtocol & MemberSetProtocol & Insert2Protocol {
-    @inlinable
-    func __construct_node(_ k: Element) -> _NodePtr {
-        fatalError()
-    }
-    
-    @inlinable
-    func destroy(_ p: _NodePtr) {
-        fatalError()
-    }
-}
 

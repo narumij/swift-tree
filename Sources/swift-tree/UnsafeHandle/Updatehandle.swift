@@ -21,18 +21,7 @@ struct _UnsafeUpdateHandle<Element: Comparable> {
     let __value_ptr: UnsafeMutablePointer<Element>
 }
 
-extension _UnsafeUpdateHandle: UnsafeUpdateHeaderProtocol { }
-
-extension _UnsafeUpdateHandle: NodeFindProtocol & NodeFindEtcProtocol {
-    
-    @inlinable
-    func value_comp(_ a: Element, _ b: Element) -> Bool {
-        a < b
-    }
-}
-
-extension _UnsafeUpdateHandle: NodeInsertProtocol {
-}
-
-extension _UnsafeUpdateHandle: RemoveProtocol {
-}
+extension _UnsafeUpdateHandle: UpdateHandleImpl { }
+extension _UnsafeUpdateHandle: NodeFindProtocol & NodeFindEtcProtocol { }
+extension _UnsafeUpdateHandle: NodeInsertProtocol { }
+extension _UnsafeUpdateHandle: RemoveProtocol { }
