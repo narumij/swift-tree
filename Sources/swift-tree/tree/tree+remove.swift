@@ -4,7 +4,7 @@ protocol RemoveProtocol
 : MemberSetProtocol
 & BeginNodeProtocol
 & EndNodeProtocol
-& SIzeProtocol
+& SizeProtocol
 { }
 
 extension RemoveProtocol {

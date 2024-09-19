@@ -3,7 +3,7 @@ import Foundation
 protocol NodeInsertProtocol
 : MemberSetProtocol
 & RefProtocol
-& SIzeProtocol
+& SizeProtocol
 & BeginNodeProtocol
 & EndNodeProtocol
 { }
