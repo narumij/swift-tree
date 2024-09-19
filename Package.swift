@@ -20,5 +20,11 @@ let package = Package(
             name: "swift-treeTests",
             dependencies: ["swift-tree"]
         ),
+        .executableTarget(
+            name: "Executable",
+            dependencies: [
+//                .product(name: "Collections", package: "swift-collections"),
+                "swift-tree" ]
+            )
     ]
 )

@@ -1,7 +1,8 @@
 import Foundation
+@testable import swift_tree
 
-#if false
-extension BasePtr2 {
+#if true
+extension _NodePtr {
     
     var offset: Int! {
         switch self {
@@ -15,7 +16,14 @@ extension BasePtr2 {
     }
 }
 
-extension BasePtr2 {
+extension _NodePtr {
     var index: Int! { self }
 }
+
+extension _NodePtr: @retroactive ExpressibleByNilLiteral {
+    public init(nilLiteral: ()) {
+        self = .nullptr
+    }
+}
+
 #endif

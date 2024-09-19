@@ -1,5 +1,6 @@
 import Foundation
 
+@usableFromInline
 protocol RemoveProtocol
 : MemberSetProtocol
 & BeginNodeProtocol

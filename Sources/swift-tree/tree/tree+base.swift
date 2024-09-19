@@ -1,58 +1,50 @@
 import Foundation
 
-@usableFromInline
+public
 typealias _NodePtr = Int
 
 extension _NodePtr {
-    @usableFromInline
+    @inlinable
     static var nullptr: Self { -2 }
-    @usableFromInline
+    @inlinable
     static var end: Self { -1 }
-    @usableFromInline
+    @inlinable
     static func node(_ p: Int) -> Self { p }
 }
 
+public
 enum _NodeRef: Equatable {
     case nullptr
     case __right_(_NodePtr)
     case __left_(_NodePtr)
 }
 
+@usableFromInline
 protocol MemberProtocol {
-    @inlinable
     func __parent_(_: _NodePtr) -> _NodePtr
-    @inlinable
     func __left_(_: _NodePtr) -> _NodePtr
-    @inlinable
     func __right_(_: _NodePtr) -> _NodePtr
-    @inlinable
     func __is_black_(_: _NodePtr) -> Bool
-    @inlinable
     func __parent_unsafe(_: _NodePtr) -> _NodePtr
 }
 
+@usableFromInline
 protocol MemberSetProtocol: MemberProtocol {
-    @inlinable
     func __is_black_(_ lhs: _NodePtr,_ rhs: Bool)
-    @inlinable
     func __parent_(_ lhs: _NodePtr,_ rhs: _NodePtr)
-    @inlinable
     func __left_(_ lhs: _NodePtr,_ rhs: _NodePtr)
-    @inlinable
     func __right_(_ lhs: _NodePtr,_ rhs: _NodePtr)
 }
 
+@usableFromInline
 protocol RefProtocol: MemberProtocol {
-    @inlinable
     func __left_ref(_: _NodePtr) -> _NodeRef
-    @inlinable
     func __right_ref(_: _NodePtr) -> _NodeRef
-    @inlinable
     func __ref_(_ rhs: _NodeRef) -> _NodePtr
-    @inlinable
     func __ref_(_ lhs: _NodeRef,_ rhs: _NodePtr)
 }
 
+@usableFromInline
 protocol ValueProtocol: MemberProtocol {
     
     associatedtype Element
@@ -60,30 +52,32 @@ protocol ValueProtocol: MemberProtocol {
     func value_comp(_:Element,_:Element) -> Bool
 }
 
+@usableFromInline
 protocol BeginNodeProtocol {
     var __begin_node: _NodePtr { get nonmutating set }
 }
 
+@usableFromInline
 protocol RootProtocol {
-    @inlinable
     func __root() -> _NodePtr
 }
 
+@usableFromInline
 protocol RootPtrProrototol {
-    @inlinable
     func __root_ptr() -> _NodeRef
 }
 
+@usableFromInline
 protocol EndNodeProtocol {
-    @inlinable
     func __end_node() -> _NodePtr
 }
 
+@usableFromInline
 protocol EndProtocol {
-    @inlinable
     func end() -> _NodePtr
 }
 
+@usableFromInline
 protocol SizeProtocol {
     var size: Int { get nonmutating set }
 }

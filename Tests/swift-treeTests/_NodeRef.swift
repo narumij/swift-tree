@@ -1,7 +1,8 @@
 import Foundation
+@testable import swift_tree
 
-#if false
-extension BaseRef2 {
+#if true
+extension _NodeRef {
     var index: Int! {
         switch self {
         case .__right_(let p):

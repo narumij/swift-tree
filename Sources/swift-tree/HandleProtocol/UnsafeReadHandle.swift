@@ -1,9 +1,10 @@
 import Foundation
 
+@usableFromInline
 protocol UnsafeReadHandleProtocol {
     associatedtype Element
-    var __header_ptr: UnsafePointer<BaseTreeHeader> { get }
-    var __node_ptr: UnsafePointer<_Node>{ get }
+    var __header_ptr: UnsafePointer<RedBlackTreeHeader> { get }
+    var __node_ptr: UnsafePointer<RedBlackTreeNode>{ get }
     var __value_ptr: UnsafePointer<Element>{ get }
 }
 

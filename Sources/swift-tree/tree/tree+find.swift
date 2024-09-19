@@ -1,9 +1,17 @@
 import Foundation
 
-protocol NodeFindEtcProtocol
-: RefProtocol
-& ValueProtocol
+@usableFromInline
+protocol NodeFindProtocol
+: ValueProtocol
 & RootProtocol
+& EndNodeProtocol
+& EndProtocol
+{ }
+
+@usableFromInline
+protocol NodeFindEtcProtocol
+: NodeFindProtocol
+& RefProtocol
 & RootPtrProrototol
 & EndNodeProtocol { }
 
@@ -61,13 +69,6 @@ extension NodeFindEtcProtocol {
         return __left_ref(__parent)
     }
 }
-
-protocol NodeFindProtocol
-: ValueProtocol
-& RootProtocol
-& EndNodeProtocol
-& EndProtocol
-{ }
 
 extension NodeFindProtocol {
     
