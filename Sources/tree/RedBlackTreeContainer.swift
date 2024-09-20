@@ -90,7 +90,7 @@ extension RedBlackTree.Container {
         return stock
       }
     #endif
-    let n = values.count
+    let n = Swift.min(nodes.count, values.count)
     nodes.append(.zero)
     values.append(k)
     return n
