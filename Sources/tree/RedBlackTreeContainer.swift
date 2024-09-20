@@ -5,21 +5,28 @@ extension RedBlackTree {
     @frozen
     public struct Container<Element: Comparable> {
         
-        @inlinable
-        public init() { }
+        @inlinable @inline(__always)
+        public init() {
+            header = .zero
+            nodes = []
+            values = []
+        }
         
         @inlinable
         public init(minimumCapacity: Int) {
+            header = .zero
+            nodes = []
+            values = []
             nodes.reserveCapacity(minimumCapacity)
             values.reserveCapacity(minimumCapacity)
         }
         
         @usableFromInline
-        var header: Header = .zero
+        var header: Header
         @usableFromInline
-        var nodes: [Node] = []
+        var nodes: [Node]
         @usableFromInline
-        var values: [Element] = []
+        var values: [Element]
         
 #if false
         @usableFromInline

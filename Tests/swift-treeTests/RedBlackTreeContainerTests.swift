@@ -260,7 +260,7 @@ final class RedBlackTreeContainerTests: XCTestCase {
         XCTAssertEqual(tree._update{ $0.__tree_min($0.__root()) }, tree.header.__begin_node)
         print(tree.nodes.graphviz())
         for i in 0..<2 {
-            XCTAssertTrue(tree.__erase_unique(i) == 1, "i = \(i)")
+            XCTAssertTrue(tree.__erase_unique(i), "i = \(i)")
             print(tree.nodes.graphviz())
             print("__root():",tree.__root())
             XCTAssertTrue(tree.__tree_invariant(tree.__root()))
@@ -279,7 +279,7 @@ final class RedBlackTreeContainerTests: XCTestCase {
         XCTAssertEqual(tree._update{ $0.__tree_min($0.__root()) }, tree.header.__begin_node)
         print(tree.nodes.graphviz())
         for i in 0..<7 {
-            XCTAssertTrue(tree.__erase_unique(i) == 1, "i = \(i)")
+            XCTAssertTrue(tree.__erase_unique(i), "i = \(i)")
             print(tree.nodes.graphviz())
             print("__root():",tree.__root())
             XCTAssertTrue(tree.__tree_invariant(tree.__root()))

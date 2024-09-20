@@ -1,11 +1,3 @@
-//
-//  RemoveProtocol.swift
-//  swift-tree
-//
-//  Created by narumij on 2024/09/20.
-//
-
-
 import Foundation
 //import Algorithms
 //import Collections

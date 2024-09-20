@@ -61,7 +61,6 @@ extension UpdateHandleImpl {
 extension UpdateHandleImpl {
 
     @inlinable
-    @inline(__always)
     func __is_black_(_ lhs: _NodePtr,_ rhs: Bool) {
         __node_ptr[lhs].__is_black_ = rhs
     }

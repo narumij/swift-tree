@@ -76,7 +76,7 @@ extension InsertUniqueProtocol {
 
     @inlinable
     mutating func
-    __emplace_unique_key_args(_ __k: Element) -> (_NodeRef, Bool)
+    __emplace_unique_key_args(_ __k: Element) -> (__r: _NodeRef, __inserted: Bool)
     {
         var __parent   = _NodePtr.nullptr
         let __child    = __find_equal(&__parent, __k)

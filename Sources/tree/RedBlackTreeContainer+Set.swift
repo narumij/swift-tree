@@ -1,13 +1,66 @@
 import Foundation
 
+public
+extension RedBlackTree.Container {
+    @inlinable @inline(__always)
+    init<S>(_ _a: S) where S: Collection, S.Element == Element {
+//        self.header = .zero
+//        self.nodes = []
+//        self.values = []
+        var _values: [Element] = _a + []
+        var _header: RedBlackTree.Header = .zero
+        let _nodes = Array<RedBlackTree.Node>(unsafeUninitializedCapacity: _values.count, initializingWith: { _nodes, initializedCount in
+            
+            initializedCount = 0
+
+            withUnsafeMutablePointer(to: &_header) { _header in
+                _values.withUnsafeMutableBufferPointer { _values in
+                    let tree = _UnsafeUpdateHandle<Element>(
+                        __header_ptr: _header,
+                        __node_ptr: _nodes.baseAddress!,
+                        __value_ptr: _values.baseAddress!)
+                    
+                    func ___construct_node(_ __k: Element) -> _NodePtr {
+                        _nodes[initializedCount] = .zero
+                        _values[initializedCount] = __k
+                        defer { initializedCount += 1 }
+                        return initializedCount
+                    }
+                    
+                    _a.forEach { __k in
+                        
+                        var __parent   = _NodePtr.nullptr
+                        let __child    = tree.__find_equal(&__parent, __k)
+                        if tree.__ref_(__child) == .nullptr {
+                            let __h = ___construct_node(__k)
+                            tree.__insert_node_at(__parent, __child, __h)
+                        }
+                    }
+                }
+            }
+        })
+        self.header = _header
+        self.nodes = _nodes
+        self.values = _values
+    }
+    
+    @inlinable
+    var count: Int { header.size }
+    
+    @inlinable
+    var isEmpty: Bool { count == 0 }
+}
+
 extension RedBlackTree.Container {
     @inlinable
+    @discardableResult
     public mutating func insert(_ p: Element) -> Bool {
         __insert_unique(p).__inserted
     }
     @inlinable
+    @discardableResult
     public mutating func remove(_ p: Element) -> Bool {
-        __erase_unique(p) == 1
+        __erase_unique(p)
     }
     @inlinable
     public func contains(_ p: Element) -> Bool {
@@ -62,106 +115,53 @@ extension RedBlackTree.Container {
             return __parent != .end ? $0.__value_(__parent) : nil
         }
     }
-    
-    @inlinable
-    public var count: Int { header.size }
-    
-    @inlinable
-    public var isEmpty: Bool { count == 0 }
-    
-    @inlinable
-    public init<S>(_ _a: S) where S: Collection, S.Element == Element {
-        self.init()
-        reserveCapacity(_a.count)
-        for a in _a {
-            _ = __insert_unique(a)
-        }
-    }
 }
 
 extension RedBlackTree.Container {
 
-    @usableFromInline
-    typealias Pointer = _NodePtr
+    public typealias Pointer = _NodePtr
 
     @inlinable
-    func begin() -> _NodePtr {
+    public func begin() -> _NodePtr {
         __begin_node
     }
     
     @inlinable
-    func end() -> _NodePtr {
+    public func end() -> _NodePtr {
         .end
     }
     
     @inlinable
-    mutating func element(at ptr: _NodePtr) -> Element! {
-        ptr == .end ? nil : values[ptr]
-    }
-    
-    @inlinable
-    mutating func remove(at ptr: _NodePtr) -> Element? {
+    public mutating func remove(at ptr: _NodePtr) -> Element? {
         ptr == .end ? nil : erase__(ptr)
     }
     
     @inlinable
-    func lower_bound(_ p: Element) -> _NodePtr {
+    public func lower_bound(_ p: Element) -> _NodePtr {
         _read { $0.__lower_bound(p, $0.__root(), .end) }
     }
     
     @inlinable
-    func upper_bound(_ p: Element) -> _NodePtr {
+    public func upper_bound(_ p: Element) -> _NodePtr {
         _read { $0.__upper_bound(p, $0.__root(), .end) }
     }
 
     @inlinable
-    var elements: [Element] {
-        var result: [Element] = []
-        var p = header.__begin_node
-        _read {
-            while p != .end {
-                result.append($0.__value_(p))
-                p = $0.__tree_next_iter(p)
-            }
-        }
-        return result
-    }
-
-    @inlinable
-    subscript(node: _NodePtr) -> Element {
+    public subscript(node: _NodePtr) -> Element {
         values[node]
     }
 
     @inlinable
-    subscript(node: _NodePtr, offsetBy distance: Int) -> Element {
+    public subscript(node: _NodePtr, offsetBy distance: Int) -> Element {
         element(node, offsetBy: distance)!
     }
     
-    @inlinable public func element(_ ptr: _NodePtr, offsetBy distance: Int) -> Element? {
-        var ptr = ptr
-        var n = distance
-        while n != 0 {
-            if n > 0 {
-                if ptr == .nullptr {
-                    ptr = __begin_node
-                } else if ptr != .end {
-                    ptr = _read { $0.__tree_next_iter(ptr) }
-                }
-                n -= 1
-            }
-            if n < 0 {
-                if ptr == __begin_node {
-                    ptr = .nullptr
-                } else {
-                    ptr = _read { $0.__tree_prev_iter(ptr) }
-                }
-                n += 1
-            }
-        }
+    @inlinable func element(_ ptr: _NodePtr, offsetBy distance: Int) -> Element? {
+        let ptr = pointer(ptr, offsetBy: distance)
         return ptr == .end ? nil : values[ptr]
     }
 
-    @inlinable public func pointer(_ ptr: _NodePtr, offsetBy distance: Int) -> _NodePtr {
+    @inlinable func pointer(_ ptr: _NodePtr, offsetBy distance: Int) -> _NodePtr {
         var ptr = ptr
         var n = distance
         while n != 0 {
@@ -186,6 +186,19 @@ extension RedBlackTree.Container {
     }
 
 #if DEBUG
+    @inlinable
+    var elements: [Element] {
+        var result: [Element] = []
+        var p = header.__begin_node
+        _read {
+            while p != .end {
+                result.append($0.__value_(p))
+                p = $0.__tree_next_iter(p)
+            }
+        }
+        return result
+    }
+
     func distance(to ptr: _NodePtr) -> Int {
         let p = _read{
             var count = 0

@@ -23,12 +23,12 @@ extension EraseProtocol {
     
     @inlinable
     mutating func
-    __erase_unique(_ __k: Element) -> Int {
+    __erase_unique(_ __k: Element) -> Bool {
         let __i = find(__k)
         if (__i == end()) {
-            return 0 }
+            return false }
         _ = erase(__i)
-        return 1
+        return true
     }
 }
 
