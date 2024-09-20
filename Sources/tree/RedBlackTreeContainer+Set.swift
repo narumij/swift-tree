@@ -4,12 +4,9 @@ public
 extension RedBlackTree.Container {
     @inlinable @inline(__always)
     init<S>(_ _a: S) where S: Collection, S.Element == Element {
-//        self.header = .zero
-//        self.nodes = []
-//        self.values = []
         var _values: [Element] = _a + []
         var _header: RedBlackTree.Header = .zero
-        let _nodes = Array<RedBlackTree.Node>(unsafeUninitializedCapacity: _values.count, initializingWith: { _nodes, initializedCount in
+        self.nodes = Array<RedBlackTree.Node>(unsafeUninitializedCapacity: _values.count, initializingWith: { _nodes, initializedCount in
             
             initializedCount = 0
 
@@ -27,7 +24,11 @@ extension RedBlackTree.Container {
                         return initializedCount
                     }
                     
-                    _a.forEach { __k in
+                    var i = 0
+                    while i < _a.count {
+                    
+                        let __k = _values[i]
+                        i += 1
                         
                         var __parent   = _NodePtr.nullptr
                         let __child    = tree.__find_equal(&__parent, __k)
@@ -40,7 +41,6 @@ extension RedBlackTree.Container {
             }
         })
         self.header = _header
-        self.nodes = _nodes
         self.values = _values
     }
     
