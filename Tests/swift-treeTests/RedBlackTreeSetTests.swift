@@ -404,15 +404,50 @@ final class RedBlackTreeSetTests: XCTestCase {
         XCTAssertEqual(set.map{ $0 }, [0,1,2,3,5])
     }
 
-#if false
-    func testArrayAccess() throws {
+    func testArrayAccess1() throws {
         let set = RedBlackTreeSet<Int>([0,1,2,3,4])
-        XCTAssertEqual(set[0], 0)
-        XCTAssertEqual(set[1], 1)
-        XCTAssertEqual(set[2], 2)
-        XCTAssertEqual(set[3], 3)
-        XCTAssertEqual(set[4], 4)
+        XCTAssertEqual(set[set.begin(), offsetBy:0], 0)
+        XCTAssertEqual(set[set.begin(), offsetBy:1], 1)
+        XCTAssertEqual(set[set.begin(), offsetBy:2], 2)
+        XCTAssertEqual(set[set.begin(), offsetBy:3], 3)
+        XCTAssertEqual(set[set.begin(), offsetBy:4], 4)
     }
-#endif
+    
+    func testArrayAccess2() throws {
+        let set = RedBlackTreeSet<Int>([0,1,2,3,4])
+        XCTAssertEqual(set[set.end(), offsetBy:-5], 0)
+        XCTAssertEqual(set[set.end(), offsetBy:-4], 1)
+        XCTAssertEqual(set[set.end(), offsetBy:-3], 2)
+        XCTAssertEqual(set[set.end(), offsetBy:-2], 3)
+        XCTAssertEqual(set[set.end(), offsetBy:-1], 4)
+    }
+    
+    func testRandom() throws {
+        var set = RedBlackTreeSet<Int>()
+        for i in ((0..<1000).compactMap{ _ in (0..<500).randomElement() }) {
+            set.insert(i)
+            XCTAssertTrue(set._read{ $0.__tree_invariant($0.__root()) })
+        }
+        for i in ((0..<1000).compactMap{ _ in (0..<500).randomElement() }) {
+            set.remove(i)
+            XCTAssertTrue(set._read{ $0.__tree_invariant($0.__root()) })
+        }
+        for i in ((0..<1000).compactMap{ _ in (0..<500).randomElement() }) {
+            set.insert(i)
+            XCTAssertTrue(set._read{ $0.__tree_invariant($0.__root()) })
+        }
+        for i in ((0..<1000).compactMap{ _ in (0..<500).randomElement() }) {
+            set.remove(i)
+            XCTAssertTrue(set._read{ $0.__tree_invariant($0.__root()) })
+        }
+        for i in ((0..<1000).compactMap{ _ in (0..<500).randomElement() }) {
+            set.insert(i)
+            XCTAssertTrue(set._read{ $0.__tree_invariant($0.__root()) })
+        }
+        for i in set {
+            set.remove(i)
+            XCTAssertTrue(set._read{ $0.__tree_invariant($0.__root()) })
+        }
+    }
 }
 #endif
