@@ -6,41 +6,36 @@ extension RedBlackTree.Container {
     var _values: [Element] = _a + []
     var _header: RedBlackTree.Header = .zero
     self.nodes = [RedBlackTree.Node](
-      unsafeUninitializedCapacity: _values.count,
-      initializingWith: { _nodes, initializedCount in
-
-        initializedCount = 0
-
-        withUnsafeMutablePointer(to: &_header) { _header in
-          _values.withUnsafeMutableBufferPointer { _values in
-            let tree = _UnsafeUpdateHandle<Element>(
-              __header_ptr: _header,
-              __node_ptr: _nodes.baseAddress!,
-              __value_ptr: _values.baseAddress!)
-
-            func ___construct_node(_ __k: Element) -> _NodePtr {
-              _nodes[initializedCount] = .zero
-              _values[initializedCount] = __k
-              defer { initializedCount += 1 }
-              return initializedCount
-            }
-
-            var i = 0
-            while i < _a.count {
-
-              let __k = _values[i]
-              i += 1
-
-              var __parent = _NodePtr.nullptr
-              let __child = tree.__find_equal(&__parent, __k)
-              if tree.__ref_(__child) == .nullptr {
-                let __h = ___construct_node(__k)
-                tree.__insert_node_at(__parent, __child, __h)
-              }
+      unsafeUninitializedCapacity: _values.count
+    ) { _nodes, initializedCount in
+      withUnsafeMutablePointer(to: &_header) { _header in
+        _values.withUnsafeMutableBufferPointer { _values in
+          var count = 0
+          func ___construct_node(_ __k: Element) -> _NodePtr {
+            _nodes[count] = .zero
+            _values[count] = __k
+            defer { count += 1 }
+            return count
+          }
+          let tree = _UnsafeUpdateHandle<Element>(
+            __header_ptr: _header,
+            __node_ptr: _nodes.baseAddress!,
+            __value_ptr: _values.baseAddress!)
+          var i = 0
+          while i < _a.count {
+            let __k = _values[i]
+            i += 1
+            var __parent = _NodePtr.nullptr
+            let __child = tree.__find_equal(&__parent, __k)
+            if tree.__ref_(__child) == .nullptr {
+              let __h = ___construct_node(__k)
+              tree.__insert_node_at(__parent, __child, __h)
             }
           }
+          initializedCount = count
         }
-      })
+      }
+    }
     self.header = _header
     self.values = _values
   }
@@ -153,8 +148,7 @@ extension RedBlackTree.Container {
     values[node]
   }
 
-  @inlinable
-  public subscript(node: _NodePtr, offsetBy distance: Int) -> Element {
+  @inlinable public subscript(node: _NodePtr, offsetBy distance: Int) -> Element {
     element(node, offsetBy: distance)!
   }
 
