@@ -1,5 +1,5 @@
 import Foundation
-@testable import swift_tree
+@testable import tree
 
 extension Collection where Element == RedBlackTree.Node, Index == Int {
     

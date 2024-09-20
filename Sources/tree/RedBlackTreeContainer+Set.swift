@@ -1,7 +1,5 @@
 import Foundation
 
-typealias RedBlackTreeContainer = RedBlackTree.Container
-
 extension RedBlackTree.Container {
     @inlinable
     public mutating func insert(_ p: Element) -> Bool {
@@ -74,6 +72,7 @@ extension RedBlackTree.Container {
     @inlinable
     public init<S>(_ _a: S) where S: Collection, S.Element == Element {
         self.init()
+        reserveCapacity(_a.count)
         for a in _a {
             _ = __insert_unique(a)
         }
@@ -81,6 +80,24 @@ extension RedBlackTree.Container {
 }
 
 extension RedBlackTree.Container {
+
+    @usableFromInline
+    typealias Pointer = _NodePtr
+
+    @inlinable
+    func begin() -> _NodePtr {
+        __begin_node
+    }
+    
+    @inlinable
+    func end() -> _NodePtr {
+        .end
+    }
+    
+    @inlinable
+    mutating func element(at ptr: _NodePtr) -> Element! {
+        ptr == .end ? nil : values[ptr]
+    }
     
     @inlinable
     mutating func remove(at ptr: _NodePtr) -> Element? {
@@ -88,20 +105,13 @@ extension RedBlackTree.Container {
     }
     
     @inlinable
-    mutating func remove(at ptr: Ptr) -> Element? {
-        remove(at: ptr.ptr)
-    }
-
-    @inlinable
-    func left(_ p: Element) -> Ptr {
-        let it = _read { $0.__lower_bound(p, $0.__root(), .end) }
-        return .init(container: self, ptr: it)
+    func lower_bound(_ p: Element) -> _NodePtr {
+        _read { $0.__lower_bound(p, $0.__root(), .end) }
     }
     
     @inlinable
-    func right(_ p: Element) -> Ptr {
-        let it = _read { $0.__upper_bound(p, $0.__root(), .end) }
-        return .init(container: self, ptr: it)
+    func upper_bound(_ p: Element) -> _NodePtr {
+        _read { $0.__upper_bound(p, $0.__root(), .end) }
     }
 
     @inlinable
@@ -117,17 +127,66 @@ extension RedBlackTree.Container {
         return result
     }
 
-    subscript(index: Int) -> Element {
-        var p = header.__begin_node
-        return _read {
-            for _ in 0 ..< index {
-                p = $0.__tree_next_iter(p)
-            }
-            return $0.__value_(p)
-        }
+    @inlinable
+    subscript(node: _NodePtr) -> Element {
+        values[node]
+    }
+
+    @inlinable
+    subscript(node: _NodePtr, offsetBy distance: Int) -> Element {
+        element(node, offsetBy: distance)!
     }
     
-    func index(of ptr: _NodePtr) -> Int {
+    @inlinable public func element(_ ptr: _NodePtr, offsetBy distance: Int) -> Element? {
+        var ptr = ptr
+        var n = distance
+        while n != 0 {
+            if n > 0 {
+                if ptr == .nullptr {
+                    ptr = __begin_node
+                } else if ptr != .end {
+                    ptr = _read { $0.__tree_next_iter(ptr) }
+                }
+                n -= 1
+            }
+            if n < 0 {
+                if ptr == __begin_node {
+                    ptr = .nullptr
+                } else {
+                    ptr = _read { $0.__tree_prev_iter(ptr) }
+                }
+                n += 1
+            }
+        }
+        return ptr == .end ? nil : values[ptr]
+    }
+
+    @inlinable public func pointer(_ ptr: _NodePtr, offsetBy distance: Int) -> _NodePtr {
+        var ptr = ptr
+        var n = distance
+        while n != 0 {
+            if n > 0 {
+                if ptr == .nullptr {
+                    ptr = __begin_node
+                } else if ptr != .end {
+                    ptr = _read { $0.__tree_next_iter(ptr) }
+                }
+                n -= 1
+            }
+            if n < 0 {
+                if ptr == __begin_node {
+                    ptr = .nullptr
+                } else {
+                    ptr = _read { $0.__tree_prev_iter(ptr) }
+                }
+                n += 1
+            }
+        }
+        return ptr
+    }
+
+#if DEBUG
+    func distance(to ptr: _NodePtr) -> Int {
         let p = _read{
             var count = 0
             var p = $0.__begin_node
@@ -140,6 +199,7 @@ extension RedBlackTree.Container {
         }
         return p
     }
+#endif
 }
 
 extension RedBlackTree.Container {
@@ -184,57 +244,6 @@ extension RedBlackTree.Container: Sequence {
     @inlinable
     public func makeIterator() -> Iterator {
         .init(container: self, ptr: header.__begin_node)
-    }
-}
-
-extension RedBlackTree.Container {
-    
-    public struct Ptr {
-        @inlinable
-        init(container: RedBlackTree.Container<Element>, ptr: _NodePtr) {
-            self.container = container
-            self.ptr = ptr
-        }
-        @usableFromInline
-        let container: RedBlackTree.Container<Element>
-        @usableFromInline
-        var ptr: _NodePtr
-        @inlinable
-        mutating func apply(_ n: Int) {
-            var n = n
-            while n != 0 {
-                if n > 0 {
-                    if ptr == .nullptr {
-                        ptr = container.__begin_node
-                    } else if ptr != .end {
-                        ptr = container._read { $0.__tree_next_iter(ptr) }
-                    }
-                    n -= 1
-                }
-                if n < 0 {
-                    if ptr == container.__begin_node {
-                        ptr = .nullptr
-                    } else {
-                        ptr = container._read { $0.__tree_prev_iter(ptr) }
-                    }
-                }
-            }
-        }
-        var index: Int {
-            container.index(of: ptr)
-        }
-        @inlinable
-        static func + (lhs: Ptr, rhs: Int) -> Ptr {
-            var l = lhs
-            l.apply(rhs)
-            return l
-        }
-        @inlinable
-        static func - (lhs: Ptr, rhs: Int) -> Ptr {
-            var l = lhs
-            l.apply(-rhs)
-            return l
-        }
     }
 }
 

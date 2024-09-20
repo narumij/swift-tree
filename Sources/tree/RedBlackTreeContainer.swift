@@ -1,10 +1,18 @@
 import Foundation
 
 extension RedBlackTree {
+    
     @frozen
     public struct Container<Element: Comparable> {
         
+        @inlinable
         public init() { }
+        
+        @inlinable
+        public init(minimumCapacity: Int) {
+            nodes.reserveCapacity(minimumCapacity)
+            values.reserveCapacity(minimumCapacity)
+        }
         
         @usableFromInline
         var header: Header = .init()
@@ -66,19 +74,19 @@ extension RedBlackTree.Container {
     
     @inlinable
     mutating func __construct_node(_ k: Element) -> _NodePtr {
-        if let stock = stock.popLast() {
-            return stock
-        }
+//        if let stock = stock.popLast() {
+//            return stock
+//        }
         let n = values.count
-        nodes.append(.init(__is_black_: false, __left_: .nullptr, __right_: .nullptr, __parent_: .nullptr))
+        nodes.append(.zero)
         values.append(k)
         return n
     }
     
     @inlinable
     mutating func destroy(_ p: _NodePtr) {
-        nodes[p].clear()
-        stock.append(p)
+//        nodes[p].clear()
+//        stock.append(p)
     }
     
     @inlinable
@@ -117,7 +125,7 @@ extension RedBlackTree.Container {
     }
     
     @inlinable
-    mutating func find(_ __v: Element) -> _NodePtr {
+    public mutating func find(_ __v: Element) -> _NodePtr {
         _update { $0.find(__v) }
     }
 }

@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import swift_tree
+@testable import tree
 
 typealias RedBlackTreeStorage = RedBlackTree.Storage
 

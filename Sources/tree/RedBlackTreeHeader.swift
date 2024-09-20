@@ -1,6 +1,7 @@
 import Foundation
 
 extension RedBlackTree {
+    
     @frozen
     @usableFromInline
     struct Header {

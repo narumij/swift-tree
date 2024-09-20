@@ -1,7 +1,6 @@
 import Foundation
-@testable import swift_tree
+@testable import tree
 
-#if true
 extension _NodeRef {
     var index: Int! {
         switch self {
@@ -14,4 +13,3 @@ extension _NodeRef {
         }
     }
 }
-#endif

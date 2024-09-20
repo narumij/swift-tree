@@ -28,6 +28,9 @@ extension RedBlackTree {
             self.__parent_ = __parent_
             self.__is_black_ = __is_black_
         }
+        
+        @usableFromInline
+        static let zero: Self = .init(__is_black_: false)
     }
 }
 

@@ -1,7 +1,7 @@
 // Instrumentsでの計測用の作業コマンド
 
 import Foundation
-import swift_tree
+import tree
 
 var tree = RedBlackTree.Container<Int>()
 //let tree = RedBlackTree.Storage<Int>()

@@ -8,23 +8,22 @@ let package = Package(
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
-            name: "swift-tree",
-            targets: ["swift-tree"]),
+            name: "tree",
+            targets: ["tree"]),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "swift-tree"),
+            name: "tree"),
         .testTarget(
             name: "swift-treeTests",
-            dependencies: ["swift-tree"]
+            dependencies: ["tree"]
         ),
         .executableTarget(
             name: "Executable",
             dependencies: [
-//                .product(name: "Collections", package: "swift-collections"),
-                "swift-tree" ]
+                "tree" ]
             )
     ]
 )
