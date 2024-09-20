@@ -4,13 +4,11 @@ extension MemberProtocol {
 
   @inlinable
   func
-    static_cast_EndNodePtr(_ p: _NodePtr) -> _NodePtr
-  { p }
+    static_cast_EndNodePtr(_ p: _NodePtr) -> _NodePtr { p }
 
   @inlinable
   func
-    static_cast_NodePtr(_ p: _NodePtr) -> _NodePtr
-  { p }
+    static_cast_NodePtr(_ p: _NodePtr) -> _NodePtr { p }
 }
 
 extension MemberProtocol {

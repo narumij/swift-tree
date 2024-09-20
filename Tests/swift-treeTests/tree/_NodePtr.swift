@@ -2,7 +2,6 @@ import Foundation
 @testable import tree
 
 extension _NodePtr {
-    
     var offset: Int! {
         switch self {
         case .end:
