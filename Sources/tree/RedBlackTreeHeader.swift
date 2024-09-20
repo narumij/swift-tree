@@ -18,6 +18,9 @@ extension RedBlackTree {
         
         @usableFromInline
         var size: Int = 0
+        
+        @usableFromInline
+        static let zero: Self = .init()
     }
 }
 

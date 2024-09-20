@@ -15,14 +15,16 @@ extension RedBlackTree {
         }
         
         @usableFromInline
-        var header: Header = .init()
+        var header: Header = .zero
         @usableFromInline
         var nodes: [Node] = []
         @usableFromInline
         var values: [Element] = []
         
+#if false
         @usableFromInline
         var stock: [_NodePtr] = []
+#endif
         
         @inlinable
         public mutating func reserveCapacity(_ minimumCapacity: Int) {
@@ -74,9 +76,11 @@ extension RedBlackTree.Container {
     
     @inlinable
     mutating func __construct_node(_ k: Element) -> _NodePtr {
-//        if let stock = stock.popLast() {
-//            return stock
-//        }
+#if false
+        if let stock = stock.popLast() {
+            return stock
+        }
+#endif
         let n = values.count
         nodes.append(.zero)
         values.append(k)
@@ -85,20 +89,18 @@ extension RedBlackTree.Container {
     
     @inlinable
     mutating func destroy(_ p: _NodePtr) {
-//        nodes[p].clear()
-//        stock.append(p)
+#if false
+        stock.append(p)
+#endif
     }
     
-    @inlinable
-    func __left_(_ p: _NodePtr) -> _NodePtr {
+    @inlinable func __left_(_ p: _NodePtr) -> _NodePtr {
         p == .end ? header.__left_ : nodes[p].__left_
     }
-    @inlinable
-    func __right_(_ p: _NodePtr) -> _NodePtr {
+    @inlinable func __right_(_ p: _NodePtr) -> _NodePtr {
         nodes[p].__right_
     }
-    @inlinable
-    func __ref_(_ rhs: _NodeRef) -> _NodePtr {
+    @inlinable func __ref_(_ rhs: _NodeRef) -> _NodePtr {
         switch rhs {
         case .nullptr:
             return .nullptr
@@ -109,23 +111,26 @@ extension RedBlackTree.Container {
         }
     }
     
-    @inlinable
-    mutating func __find_equal(_ __parent: inout _NodePtr, _ __v: Element) -> _NodeRef {
+    @inlinable mutating func
+    __find_equal(_ __parent: inout _NodePtr, _ __v: Element) -> _NodeRef {
         _update{ $0.__find_equal(&__parent, __v) }
     }
     
-    @inlinable
-    mutating func __insert_node_at(_ __parent: _NodePtr, _ __child: _NodeRef, _ __new_node: _NodePtr) {
+    @inlinable mutating func
+    __insert_node_at(_ __parent: _NodePtr, _ __child: _NodeRef, _ __new_node: _NodePtr) {
         _update{ $0.__insert_node_at(__parent, __child, __new_node) }
     }
     
-    @inlinable
-    mutating func __remove_node_pointer(_ __ptr: _NodePtr) -> _NodePtr {
+    @inlinable mutating func
+    __remove_node_pointer(_ __ptr: _NodePtr) -> _NodePtr {
         _update{ $0.__remove_node_pointer(__ptr) }
     }
+}
+
+public extension RedBlackTree.Container {
     
-    @inlinable
-    public mutating func find(_ __v: Element) -> _NodePtr {
+    @inlinable mutating func
+    find(_ __v: Element) -> _NodePtr {
         _update { $0.find(__v) }
     }
 }
@@ -146,5 +151,3 @@ extension RedBlackTree.Container {
         return __value_
     }
 }
-
-
