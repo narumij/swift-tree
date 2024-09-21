@@ -10,7 +10,7 @@
 
 - [使用例](https://atcoder.jp/contests/abc370/submissions/57922896)
 
-メンバー関数やメンバー変数については、[SortedSet](https://github.com/tatyam-prime/SortedSet)を参考にしました。
+公開のメンバー関数やメンバー変数については、[SortedSet](https://github.com/tatyam-prime/SortedSet)を参考にしました。
 
 かなり大げさな代物ですが、それでも使っていただける場合、ご自身でソースを連結して提出に使ってください。
 
