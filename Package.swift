@@ -17,7 +17,7 @@ let package = Package(
         .target(
             name: "tree"),
         .testTarget(
-            name: "swift-treeTests",
+            name: "treeTests",
             dependencies: ["tree"]
         ),
         .executableTarget(
