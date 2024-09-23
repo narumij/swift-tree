@@ -23,7 +23,8 @@ public
   typealias RedBlackTreeMap<Key: Comparable, Value> = RedBlackTreeMapBase<KeyInfo<Key>, Value>
 
 public struct RedBlackTreeMapBase<KeyInfo, Value>
-where KeyInfo: RedBlackTreeMapKeyProtocol, KeyInfo.Key: Equatable {
+where KeyInfo: RedBlackTreeMapKeyProtocol//, KeyInfo.Key: Equatable
+{
 
   public
     typealias Key = KeyInfo.Key
@@ -44,7 +45,10 @@ where KeyInfo: RedBlackTreeMapKeyProtocol, KeyInfo.Key: Equatable {
     mutating get {
       _update {
         let it = $0.__lower_bound(key, $0.__root(), $0.__left_)
-        guard it >= 0, Self.__key($0.__value_ptr[it]) == key else { return nil }
+        guard it >= 0,
+          !Self.value_comp(Self.__key($0.__value_ptr[it]), key),
+          !Self.value_comp(key, Self.__key($0.__value_ptr[it]))
+        else { return nil }
         return Self.__value($0.__value_ptr[it])
       }
     }
