@@ -48,9 +48,9 @@ protocol StorageProtocol {
 
   associatedtype _Key
   associatedtype Element
-    
-    @inlinable
-    static func __key(_ e: Element) -> _Key
+
+  @inlinable
+  static func __key(_ e: Element) -> _Key
 
   @inlinable
   mutating func __construct_node(_ k: Element) -> _NodePtr
@@ -61,8 +61,8 @@ protocol StorageProtocol {
 
 @usableFromInline
 protocol InsertUniqueProtocol: StorageProtocol {
-  mutating func __ref_(_ rhs: _NodeRef) -> _NodePtr
-  mutating func
+  func __ref_(_ rhs: _NodeRef) -> _NodePtr
+  func
     __find_equal(_ __parent: inout _NodePtr, _ __v: _Key) -> _NodeRef
   mutating func
     __insert_node_at(
@@ -83,7 +83,7 @@ extension InsertUniqueProtocol {
     __emplace_unique_key_args(_ __k: Element) -> (__r: _NodeRef, __inserted: Bool)
   {
     var __parent = _NodePtr.nullptr
-      let __child = __find_equal(&__parent, Self.__key(__k))
+    let __child = __find_equal(&__parent, Self.__key(__k))
     let __r = __child
     var __inserted = false
     if __ref_(__child) == .nullptr {

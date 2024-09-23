@@ -8,15 +8,88 @@ protocol ValueComparer {
   static func value_comp(_: _Key, _: _Key) -> Bool
 }
 
-@frozen
 @usableFromInline
-struct _UnsafeMutatingHandle<VC> where VC: ValueComparer {
+protocol _UnsafeHandleCommon {
+  associatedtype VC: ValueComparer
+}
+
+extension _UnsafeHandleCommon {
 
   @usableFromInline
   typealias _Key = VC._Key
 
   @usableFromInline
   typealias Element = VC.Element
+
+  @inlinable func __value_(_ e: VC.Element) -> _Key {
+    VC.__key(e)
+  }
+
+  @inlinable func value_comp(_ a: _Key, _ b: _Key) -> Bool {
+    VC.value_comp(a, b)
+  }
+}
+
+@frozen
+@usableFromInline
+struct _UnsafeHandle<VC> where VC: ValueComparer {
+
+  @inlinable
+  @inline(__always)
+  init(
+    __header_ptr: UnsafePointer<RedBlackTree.Header>,
+    __node_ptr: UnsafePointer<RedBlackTree.Node>,
+    __value_ptr: UnsafePointer<Element>
+  ) {
+    self.__header_ptr = __header_ptr
+    self.__node_ptr = __node_ptr
+    self.__value_ptr = __value_ptr
+  }
+  @usableFromInline
+  let __header_ptr: UnsafePointer<RedBlackTree.Header>
+  @usableFromInline
+  let __node_ptr: UnsafePointer<RedBlackTree.Node>
+  @usableFromInline
+  let __value_ptr: UnsafePointer<Element>
+}
+
+extension _UnsafeHandle: _UnsafeHandleCommon {
+
+  @inlinable func __value_(_ p: _NodePtr) -> _Key {
+    __value_(__value_ptr[p])
+  }
+}
+
+extension _UnsafeHandle: ReadHandleImpl {}
+extension _UnsafeHandle: NodeFindProtocol & NodeFindEtcProtocol & FindLeafEtcProtocol {}
+
+@usableFromInline
+protocol _UnsafeHandleBase {
+  associatedtype VC: ValueComparer
+  func _read<R>(_ body: (_UnsafeHandle<VC>) throws -> R) rethrows -> R
+}
+
+extension _UnsafeHandleBase {
+
+  @inlinable
+  func __ref_(_ rhs: _NodeRef) -> _NodePtr {
+    _read { $0.__ref_(rhs) }
+  }
+
+  @inlinable
+  func __find_equal(_ __parent: inout _NodePtr, _ __v: VC._Key) -> _NodeRef {
+    _read { $0.__find_equal(&__parent, __v) }
+  }
+
+  @inlinable
+  func find(_ __v: VC._Key) -> _NodePtr {
+    _read { $0.find(__v) }
+  }
+}
+
+@frozen
+@usableFromInline
+struct _UnsafeMutatingHandle<VC> where VC: ValueComparer {
 
   @inlinable @inline(__always)
   init(
@@ -36,14 +109,10 @@ struct _UnsafeMutatingHandle<VC> where VC: ValueComparer {
   let __value_ptr: UnsafeMutablePointer<Element>
 }
 
-extension _UnsafeMutatingHandle {
+extension _UnsafeMutatingHandle: _UnsafeHandleCommon {
 
   @inlinable func __value_(_ p: _NodePtr) -> _Key {
-    VC.__key(__value_ptr[p])
-  }
-
-  @inlinable func value_comp(_ a: _Key, _ b: _Key) -> Bool {
-    VC.value_comp(a, b)
+    __value_(__value_ptr[p])
   }
 }
 

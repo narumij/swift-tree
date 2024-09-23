@@ -24,8 +24,7 @@ extension RedBlackTree.Container {
         return c
     }
     
-    @inlinable
-    var __left_: _NodePtr {
+    @inlinable var __left_: _NodePtr {
         get { header.__left_ }
         set { header.__left_ = newValue }
     }

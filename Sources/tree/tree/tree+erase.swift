@@ -2,7 +2,7 @@ import Foundation
 
 @usableFromInline
 protocol EraseProtocol: StorageProtocol & EndProtocol {
-    mutating func find(_ __v: _Key) -> _NodePtr
+  func find(_ __v: _Key) -> _NodePtr
   mutating func __remove_node_pointer(_ __ptr: _NodePtr) -> _NodePtr
 }
 

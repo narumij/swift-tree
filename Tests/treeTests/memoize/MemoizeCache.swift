@@ -21,7 +21,7 @@ where A: Comparable, B: Comparable
     var __memo: RedBlackTreeMapBase<Key, B> = .init()
     @inlinable
     subscript(a: A) -> B? {
-        mutating get { __memo[a] }
+        get { __memo[a] }
         mutating set { __memo[a] = newValue }
     }
 }
@@ -46,7 +46,7 @@ where A: Comparable, B: Comparable
     var __memo: RedBlackTreeMapBase<Key,C> = .init()
     @inlinable
     subscript(a: A, b: B) -> C? {
-        mutating get { __memo[(a,b)] }
+        get { __memo[(a,b)] }
         mutating set { __memo[(a,b)] = newValue }
     }
 }
@@ -71,7 +71,7 @@ where A: Comparable, B: Comparable, C: Comparable
     var __memo: RedBlackTreeMapBase<Key,D> = .init()
     @inlinable
     subscript(a: A, b: B, c: C) -> D? {
-        mutating get { __memo[(a,b,c)] }
+        get { __memo[(a,b,c)] }
         mutating set { __memo[(a,b,c)] = newValue }
     }
 }
@@ -96,7 +96,7 @@ where A: Comparable, B: Comparable, C: Comparable, D: Comparable
     var __memo: RedBlackTreeMapBase<Key, E> = .init()
     @inlinable
     subscript(a: A, b: B, c: C, d: D) -> E? {
-        mutating get { __memo[(a,b,c,d)] }
+        get { __memo[(a,b,c,d)] }
         mutating set { __memo[(a,b,c,d)] = newValue }
     }
 }

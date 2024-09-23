@@ -4,9 +4,9 @@ extension RedBlackTree {
 
   @frozen
   public struct Container<Element: Comparable> {
-      
-      @usableFromInline
-      typealias _Key = Element
+
+    @usableFromInline
+    typealias _Key = Element
 
     @inlinable @inline(__always)
     public init() {
@@ -107,8 +107,8 @@ extension RedBlackTree.Container {
   }
 
   @inlinable
-  mutating func __ref_(_ rhs: _NodeRef) -> _NodePtr {
-    _update { $0.__ref_(rhs) }
+  func __ref_(_ rhs: _NodeRef) -> _NodePtr {
+    _read { $0.__ref_(rhs) }
   }
 
   @inlinable
@@ -142,8 +142,8 @@ extension RedBlackTree.Container {
 }
 
 extension RedBlackTree.Container: InsertUniqueProtocol {
-    @inlinable @inline(__always)
-    static func __key(_ e: Element) -> Element { e }
+  @inlinable @inline(__always)
+  static func __key(_ e: Element) -> Element { e }
 }
 
 extension RedBlackTree.Container: EraseProtocol {}

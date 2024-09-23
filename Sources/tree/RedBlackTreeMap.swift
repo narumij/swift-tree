@@ -23,7 +23,7 @@ public
   typealias RedBlackTreeMap<Key: Comparable, Value> = RedBlackTreeMapBase<KeyInfo<Key>, Value>
 
 public struct RedBlackTreeMapBase<KeyInfo, Value>
-where KeyInfo: RedBlackTreeMapKeyProtocol//, KeyInfo.Key: Equatable
+where KeyInfo: RedBlackTreeMapKeyProtocol  //, KeyInfo.Key: Equatable
 {
 
   public
@@ -42,8 +42,8 @@ where KeyInfo: RedBlackTreeMapKeyProtocol//, KeyInfo.Key: Equatable
   }
 
   public subscript(key: Key) -> Value? {
-    mutating get {
-      _update {
+    get {
+      _read {
         let it = $0.__lower_bound(key, $0.__root(), $0.__left_)
         guard it >= 0,
           !Self.value_comp(Self.__key($0.__value_ptr[it]), key),
@@ -83,6 +83,25 @@ extension RedBlackTreeMapBase: ValueComparer {
   @inlinable
   static func value_comp(_ a: Key, _ b: Key) -> Bool {
     KeyInfo.value_comp(a, b)
+  }
+}
+
+extension RedBlackTreeMapBase: _UnsafeHandleBase {
+
+  @inlinable
+  @inline(__always)
+  func _read<R>(_ body: (_UnsafeHandle<Self>) throws -> R) rethrows -> R {
+    return try withUnsafePointer(to: header) { header in
+      try nodes.withUnsafeBufferPointer { nodes in
+        try values.withUnsafeBufferPointer { values in
+          try body(
+            _UnsafeHandle<Self>(
+              __header_ptr: header,
+              __node_ptr: nodes.baseAddress!,
+              __value_ptr: values.baseAddress!))
+        }
+      }
+    }
   }
 }
 
