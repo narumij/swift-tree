@@ -2,10 +2,10 @@ import Foundation
 
 @usableFromInline
 protocol ReadHandleImpl: MemberProtocol & ValueProtocol & RootImpl & RefImpl & RootPtrImpl {
-  associatedtype Element
+  associatedtype _Key
   var __header_ptr: UnsafePointer<RedBlackTree.Header> { get }
   var __node_ptr: UnsafePointer<RedBlackTree.Node> { get }
-  var __value_ptr: UnsafePointer<Element> { get }
+  var __value_ptr: UnsafePointer<_Key> { get }
 }
 
 extension ReadHandleImpl {
@@ -61,5 +61,5 @@ extension ReadHandleImpl {
 extension ReadHandleImpl {
   @inlinable
   @inline(__always)
-  func __value_(_ p: _NodePtr) -> Element { __value_ptr[p] }
+  func __value_(_ p: _NodePtr) -> _Key { __value_ptr[p] }
 }

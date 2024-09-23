@@ -52,14 +52,14 @@ protocol RefSetProtocol: RefProtocol {
 @usableFromInline
 protocol ValueProtocol: MemberProtocol {
 
-  associatedtype Element
-  func __value_(_: _NodePtr) -> Element
-  func value_comp(_: Element, _: Element) -> Bool
+  associatedtype _Key
+  func __value_(_: _NodePtr) -> _Key
+  func value_comp(_: _Key, _: _Key) -> Bool
 }
 
-extension ValueProtocol where Element: Comparable {
+extension ValueProtocol where _Key: Comparable {
   @inlinable
-  func value_comp(_ a: Element, _ b: Element) -> Bool { a < b }
+  func value_comp(_ a: _Key, _ b: _Key) -> Bool { a < b }
 }
 
 @usableFromInline

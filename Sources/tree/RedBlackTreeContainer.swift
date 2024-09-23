@@ -4,6 +4,9 @@ extension RedBlackTree {
 
   @frozen
   public struct Container<Element: Comparable> {
+      
+      @usableFromInline
+      typealias _Key = Element
 
     @inlinable @inline(__always)
     public init() {
@@ -103,28 +106,14 @@ extension RedBlackTree.Container {
     #endif
   }
 
-  @inlinable func __left_(_ p: _NodePtr) -> _NodePtr {
-    p == .end ? header.__left_ : nodes[p].__left_
-  }
-  @inlinable func __right_(_ p: _NodePtr) -> _NodePtr {
-    nodes[p].__right_
-  }
-  @inlinable func __ref_(_ rhs: _NodeRef) -> _NodePtr {
-    switch rhs {
-    case .nullptr:
-      return .nullptr
-    case .__right_(let basePtr):
-      return __right_(basePtr)
-    case .__left_(let basePtr):
-      return __left_(basePtr)
-    }
+  @inlinable
+  mutating func __ref_(_ rhs: _NodeRef) -> _NodePtr {
+    _update { $0.__ref_(rhs) }
   }
 
   @inlinable
-  mutating func
-    __find_equal(_ __parent: inout _NodePtr, _ __v: Element) -> _NodeRef
-  {
-    _update { $0.__find_equal(&__parent, __v) }
+  func __find_equal(_ __parent: inout _NodePtr, _ __v: Element) -> _NodeRef {
+    _read { $0.__find_equal(&__parent, __v) }
   }
 
   @inlinable
@@ -145,14 +134,17 @@ extension RedBlackTree.Container {
 extension RedBlackTree.Container {
 
   @inlinable
-  public mutating func
+  public func
     find(_ __v: Element) -> _NodePtr
   {
-    _update { $0.find(__v) }
+    _read { $0.find(__v) }
   }
 }
 
-extension RedBlackTree.Container: InsertUniqueProtocol {}
+extension RedBlackTree.Container: InsertUniqueProtocol {
+    @inlinable @inline(__always)
+    static func __key(_ e: Element) -> Element { e }
+}
 
 extension RedBlackTree.Container: EraseProtocol {}
 

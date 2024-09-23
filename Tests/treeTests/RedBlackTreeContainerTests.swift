@@ -30,6 +30,14 @@ extension RedBlackTree.Container {
         set { header.__left_ = newValue }
     }
     
+    @inlinable func __left_(_ p: _NodePtr) -> _NodePtr {
+        _read{ $0.__left_(p) }
+    }
+      
+    @inlinable func __right_(_ p: _NodePtr) -> _NodePtr {
+        _read{ $0.__right_(p) }
+    }
+    
     @inlinable
     func __root() -> _NodePtr {
         __left_

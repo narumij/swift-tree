@@ -255,3 +255,9 @@ extension RedBlackTree.Container: Sequence {
     .init(container: self, ptr: header.__begin_node)
   }
 }
+
+extension RedBlackTree.Container: ExpressibleByArrayLiteral {
+    public init(arrayLiteral elements: Element...) {
+        self.init(elements)
+    }
+}

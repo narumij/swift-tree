@@ -4,7 +4,7 @@ extension ValueProtocol {
 
   @inlinable
   func
-    __lower_bound(_ __v: Element, _ __root: _NodePtr, _ __result: _NodePtr) -> _NodePtr
+    __lower_bound(_ __v: _Key, _ __root: _NodePtr, _ __result: _NodePtr) -> _NodePtr
   {
     var __root = __root
     var __result = __result
@@ -22,7 +22,7 @@ extension ValueProtocol {
 
   @inlinable
   func
-    __upper_bound(_ __v: Element, _ __root: _NodePtr, _ __result: _NodePtr) -> _NodePtr
+    __upper_bound(_ __v: _Key, _ __root: _NodePtr, _ __result: _NodePtr) -> _NodePtr
   {
     var __root = __root
     var __result = __result
