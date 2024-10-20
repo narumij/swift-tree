@@ -5,7 +5,7 @@ import Foundation
 // よくよく考えるとサイズが小さいと
 // アルゴリムのメリットが消えてしまうので、
 // 保留に
-
+#if false
 @usableFromInline
 struct RedBlackTree4<Element>
 where Element: Comparable, Element: SIMDScalar {
@@ -76,3 +76,4 @@ extension RedBlackTree4 {
     }
   }
 }
+#endif

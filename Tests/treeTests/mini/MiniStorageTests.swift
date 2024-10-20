@@ -17,12 +17,14 @@ final class MiniStorageTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
+#if false
     func testInitEmtpy() throws {
         let set = RedBlackTree4<Int>()
         XCTAssertEqual(set.__values, [0,0,0,0])
         XCTAssertEqual(set.count, 0)
         XCTAssertTrue(set.isEmpty)
     }
+#endif
 
     func testExample() throws {
         // This is an example of a functional test case.

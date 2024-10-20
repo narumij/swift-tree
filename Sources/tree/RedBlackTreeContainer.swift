@@ -44,16 +44,27 @@ extension RedBlackTree {
   }
 }
 
-extension RedBlackTree.Container {
+extension RedBlackTree.Container: ValueComparer {
+
+  @inlinable @inline(__always)
+  static func __key(_ e: Element) -> Element { e }
+
+  @inlinable
+  static func value_comp(_ a: Element, _ b: Element) -> Bool {
+    a < b
+  }
+}
+
+extension RedBlackTree.Container: _UnsafeHandleBase {
 
   @inlinable
   @inline(__always)
-  func _read<R>(_ body: (_UnsafeReadHandle<Element>) throws -> R) rethrows -> R {
+  func _read<R>(_ body: (_UnsafeHandle<Self>) throws -> R) rethrows -> R {
     return try withUnsafePointer(to: header) { header in
       try nodes.withUnsafeBufferPointer { nodes in
         try values.withUnsafeBufferPointer { values in
           try body(
-            _UnsafeReadHandle<Element>(
+            _UnsafeHandle<Self>(
               __header_ptr: header,
               __node_ptr: nodes.baseAddress!,
               __value_ptr: values.baseAddress!))
@@ -61,15 +72,18 @@ extension RedBlackTree.Container {
       }
     }
   }
+}
+
+extension RedBlackTree.Container: _UnsafeMutatingHandleBase {
 
   @inlinable
   @inline(__always)
-  mutating func _update<R>(_ body: (_UnsafeUpdateHandle<Element>) throws -> R) rethrows -> R {
+  mutating func _update<R>(_ body: (_UnsafeMutatingHandle<Self>) throws -> R) rethrows -> R {
     return try withUnsafeMutablePointer(to: &header) { header in
       try nodes.withUnsafeMutableBufferPointer { nodes in
         try values.withUnsafeMutableBufferPointer { values in
           try body(
-            _UnsafeUpdateHandle<Element>(
+            _UnsafeMutatingHandle<Self>(
               __header_ptr: header,
               __node_ptr: nodes.baseAddress!,
               __value_ptr: values.baseAddress!))
@@ -80,11 +94,6 @@ extension RedBlackTree.Container {
 }
 
 extension RedBlackTree.Container {
-
-  @inlinable
-  var __begin_node: _NodePtr {
-    header.__begin_node
-  }
 
   @inlinable
   mutating func __construct_node(_ k: Element) -> _NodePtr {
@@ -105,59 +114,7 @@ extension RedBlackTree.Container {
       stock.append(p)
     #endif
   }
-
-  @inlinable
-  func __ref_(_ rhs: _NodeRef) -> _NodePtr {
-    _read { $0.__ref_(rhs) }
-  }
-
-  @inlinable
-  func __find_equal(_ __parent: inout _NodePtr, _ __v: Element) -> _NodeRef {
-    _read { $0.__find_equal(&__parent, __v) }
-  }
-
-  @inlinable
-  mutating func
-    __insert_node_at(_ __parent: _NodePtr, _ __child: _NodeRef, _ __new_node: _NodePtr)
-  {
-    _update { $0.__insert_node_at(__parent, __child, __new_node) }
-  }
-
-  @inlinable
-  mutating func
-    __remove_node_pointer(_ __ptr: _NodePtr) -> _NodePtr
-  {
-    _update { $0.__remove_node_pointer(__ptr) }
-  }
 }
 
-extension RedBlackTree.Container {
-
-  @inlinable
-  public func
-    find(_ __v: Element) -> _NodePtr
-  {
-    _read { $0.find(__v) }
-  }
-}
-
-extension RedBlackTree.Container: InsertUniqueProtocol {
-  @inlinable @inline(__always)
-  static func __key(_ e: Element) -> Element { e }
-}
-
+extension RedBlackTree.Container: InsertUniqueProtocol {}
 extension RedBlackTree.Container: EraseProtocol {}
-
-extension RedBlackTree.Container {
-
-  @inlinable
-  mutating func
-    erase__(_ __p: _NodePtr) -> Element?
-  {
-    let __value_ = _update { __p == .end ? nil : $0.__value_ptr[__p] }
-    let __np = __get_np(__p)
-    _ = __remove_node_pointer(__np)
-    destroy(__p)
-    return __value_
-  }
-}

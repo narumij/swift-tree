@@ -17,7 +17,7 @@ extension RedBlackTree.Container {
             defer { count += 1 }
             return count
           }
-          let tree = _UnsafeUpdateHandle<Element>(
+          let tree = _UnsafeMutatingHandle<Self>(
             __header_ptr: _header,
             __node_ptr: _nodes.baseAddress!,
             __value_ptr: _values.baseAddress!)
@@ -120,7 +120,7 @@ extension RedBlackTree.Container {
 
   @inlinable
   public func begin() -> _NodePtr {
-    __begin_node
+    header.__begin_node
   }
 
   @inlinable
@@ -130,7 +130,10 @@ extension RedBlackTree.Container {
 
   @inlinable
   public mutating func remove(at ptr: _NodePtr) -> Element? {
-    ptr == .end ? nil : erase__(ptr)
+    guard ptr != .end else { return nil }
+    let e = values[ptr]
+    _ = erase(ptr)
+    return e
   }
 
   @inlinable
@@ -158,27 +161,7 @@ extension RedBlackTree.Container {
   }
 
   @inlinable func pointer(_ ptr: _NodePtr, offsetBy distance: Int) -> _NodePtr {
-    var ptr = ptr
-    var n = distance
-    while n != 0 {
-      if n > 0 {
-        if ptr == .nullptr {
-          ptr = __begin_node
-        } else if ptr != .end {
-          ptr = _read { $0.__tree_next_iter(ptr) }
-        }
-        n -= 1
-      }
-      if n < 0 {
-        if ptr == __begin_node {
-          ptr = .nullptr
-        } else {
-          ptr = _read { $0.__tree_prev_iter(ptr) }
-        }
-        n += 1
-      }
-    }
-    return ptr
+    _read { $0.pointer(ptr, offsetBy: distance) }
   }
 
   #if DEBUG
@@ -196,17 +179,7 @@ extension RedBlackTree.Container {
     }
 
     func distance(to ptr: _NodePtr) -> Int {
-      let p = _read {
-        var count = 0
-        var p = $0.__begin_node
-        while p != .end {
-          if p == ptr { break }
-          p = $0.__tree_next_iter(p)
-          count += 1
-        }
-        return count
-      }
-      return p
+      _read { $0.distance(to: ptr) }
     }
   #endif
 }
@@ -250,6 +223,7 @@ extension RedBlackTree.Container: Sequence {
       return ptr == .end ? nil : container.values[ptr]
     }
   }
+    
   @inlinable
   public func makeIterator() -> Iterator {
     .init(container: self, ptr: header.__begin_node)
@@ -257,7 +231,7 @@ extension RedBlackTree.Container: Sequence {
 }
 
 extension RedBlackTree.Container: ExpressibleByArrayLiteral {
-    public init(arrayLiteral elements: Element...) {
-        self.init(elements)
-    }
+  public init(arrayLiteral elements: Element...) {
+    self.init(elements)
+  }
 }

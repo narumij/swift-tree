@@ -57,11 +57,6 @@ protocol ValueProtocol: MemberProtocol {
   func value_comp(_: _Key, _: _Key) -> Bool
 }
 
-extension ValueProtocol where _Key: Comparable {
-  @inlinable
-  func value_comp(_ a: _Key, _ b: _Key) -> Bool { a < b }
-}
-
 @usableFromInline
 protocol BeginNodeProtocol {
   var __begin_node: _NodePtr { get nonmutating set }
