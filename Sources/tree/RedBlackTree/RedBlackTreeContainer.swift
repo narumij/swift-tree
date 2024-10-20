@@ -1,14 +1,14 @@
 import Foundation
 
 @usableFromInline
-protocol RedBlackTreeContainer____: EndProtocol, ValueComparer {
+protocol RedBlackTreeContainerBase: EndProtocol, ValueComparer {
   associatedtype Element
   var header: RedBlackTree.Header { get set }
   var nodes: [RedBlackTree.Node] { get set }
   var values: [Element] { get set }
 }
 
-extension RedBlackTreeContainer____ {
+extension RedBlackTreeContainerBase {
 
   @inlinable
   @inline(__always)
@@ -27,7 +27,7 @@ extension RedBlackTreeContainer____ {
   }
 }
 
-extension RedBlackTreeContainer____ {
+extension RedBlackTreeContainerBase {
 
   @inlinable
   public var count: Int { header.size }
@@ -47,7 +47,7 @@ extension RedBlackTreeContainer____ {
 }
 
 @usableFromInline
-protocol RedBlackTreeContainer: RedBlackTreeContainer____ {}
+protocol RedBlackTreeContainer: RedBlackTreeContainerBase {}
 
 extension RedBlackTreeContainer {
 
