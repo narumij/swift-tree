@@ -94,3 +94,46 @@ extension InsertUniqueProtocol {
     return (__r, __inserted)
   }
 }
+
+@usableFromInline
+protocol InsertMultiProtocol: StorageProtocol {
+  func __ref_(_ rhs: _NodeRef) -> _NodePtr
+  func
+    __find_leaf_high(_ __parent: inout _NodePtr, _ __v: _Key) -> _NodeRef
+  mutating func
+    __insert_node_at(
+      _ __parent: _NodePtr, _ __child: _NodeRef,
+      _ __new_node: _NodePtr)
+}
+
+extension InsertMultiProtocol {
+  
+  //  _LIBCPP_HIDE_FROM_ABI iterator __insert_multi(__container_value_type&& __v) {
+  //    return __emplace_multi(std::move(__v));
+  //  }
+  @inlinable
+  public mutating func __insert_multi(_ x: Element) -> _NodePtr {
+    __emplace_multi(x)
+  }
+  
+//  template <class _Tp, class _Compare, class _Allocator>
+//  template <class... _Args>
+//  typename __tree<_Tp, _Compare, _Allocator>::iterator
+//  __tree<_Tp, _Compare, _Allocator>::__emplace_multi(_Args&&... __args) {
+//    __node_holder __h = __construct_node(std::forward<_Args>(__args)...);
+//    __parent_pointer __parent;
+//    __node_base_pointer& __child = __find_leaf_high(__parent, _NodeTypes::__get_key(__h->__value_));
+//    __insert_node_at(__parent, __child, static_cast<__node_base_pointer>(__h.get()));
+//    return iterator(static_cast<__node_pointer>(__h.release()));
+//  }
+  @inlinable
+  mutating func
+  __emplace_multi(_ __k: Element) -> _NodePtr
+  {
+    let __h = __construct_node(__k);
+    var __parent = _NodePtr.nullptr
+    let __child = __find_leaf_high(&__parent, Self.__key(__k))
+    __insert_node_at(__parent, __child, __h)
+    return __h
+  }
+}

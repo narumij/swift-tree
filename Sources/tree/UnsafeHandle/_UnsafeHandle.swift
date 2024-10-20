@@ -45,6 +45,11 @@ extension _UnsafeHandleBase {
   func __ref_(_ rhs: _NodeRef) -> _NodePtr {
     _read { $0.__ref_(rhs) }
   }
+  
+  @inlinable
+  func __find_leaf_high(_ __parent: inout _NodePtr, _ __v: VC._Key) -> _NodeRef {
+    _read { $0.__find_leaf_high(&__parent, __v) }
+  }
 
   @inlinable
   func __find_equal(_ __parent: inout _NodePtr, _ __v: VC._Key) -> _NodeRef {

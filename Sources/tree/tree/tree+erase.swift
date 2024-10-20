@@ -32,4 +32,19 @@ extension EraseProtocol {
     _ = erase(__i)
     return true
   }
+  
+//  template <class _Tp, class _Compare, class _Allocator>
+//  template <class _Key>
+//  typename __tree<_Tp, _Compare, _Allocator>::size_type
+//  __tree<_Tp, _Compare, _Allocator>::__erase_multi(const _Key& __k) {
+//    pair<iterator, iterator> __p = __equal_range_multi(__k);
+//    size_type __r                = 0;
+//    for (; __p.first != __p.second; ++__r)
+//      __p.first = erase(__p.first);
+//    return __r;
+//  }
+  @inlinable
+  mutating func __erase_multi(_ __k: _Key) {
+    
+  }
 }
