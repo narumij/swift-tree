@@ -11,7 +11,7 @@ import XCTest
 
 extension RedBlackTreeSet {
     func left(_ p: Element) -> Int { distance(to: lower_bound(p)) }
-    func right(_ p: Element) -> _NodePtr { distance(to: upper_bound(p)) }
+    func right(_ p: Element) -> Int { distance(to: upper_bound(p)) }
 }
 
 final class RedBlackTreeSetTests: XCTestCase {
