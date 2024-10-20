@@ -115,25 +115,18 @@ extension RedBlackTreeSetContainer {
   }
 }
 
-public
-  protocol RedBlackTreeIteratee
-{
-  associatedtype Element
-  func iteratorNext(ptr: _NodePtr) -> _NodePtr
-  func iteratorValue(ptr: _NodePtr) -> Element
+@usableFromInline
+protocol RedBlackTreeRemoveProtocol: RedBlackTreeContainer, EraseProtocol {
+  mutating func erase(_ __p: _NodePtr) -> _NodePtr
 }
 
-extension RedBlackTreeSetContainer {
-
-  public func iteratorNext(ptr: _NodePtr) -> _NodePtr {
-    _read { $0.__tree_next_iter(ptr) }
-  }
-
-  public func iteratorValue(ptr: _NodePtr) -> Element {
-    values[ptr]
+extension RedBlackTreeRemoveProtocol {
+  @inlinable
+  @discardableResult
+  public mutating func remove(at ptr: _NodePtr) -> Element? {
+    guard ptr != .end else { return nil }
+    let e = values[ptr]
+    _ = erase(ptr)
+    return e
   }
 }
-
-extension RedBlackTreeSet: RedBlackTreeIteratee {}
-
-extension RedBlackTreeMultiset: RedBlackTreeIteratee {}

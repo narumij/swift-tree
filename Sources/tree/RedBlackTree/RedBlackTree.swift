@@ -22,3 +22,21 @@ extension RedBlackTree {
   }
 }
 
+public
+  protocol RedBlackTreeIteratee
+{
+  associatedtype Element
+  func iteratorNext(ptr: _NodePtr) -> _NodePtr
+  func iteratorValue(ptr: _NodePtr) -> Element
+}
+
+extension RedBlackTreeSetContainer {
+
+  public func iteratorNext(ptr: _NodePtr) -> _NodePtr {
+    _read { $0.__tree_next_iter(ptr) }
+  }
+
+  public func iteratorValue(ptr: _NodePtr) -> Element {
+    values[ptr]
+  }
+}

@@ -75,7 +75,7 @@ extension RedBlackTreeMultiset: _UnsafeMutatingHandleBase {
 }
 
 extension RedBlackTreeMultiset: InsertMultiProtocol {}
-extension RedBlackTreeMultiset: EraseProtocol & EraseProtocol2 {}
+extension RedBlackTreeMultiset: EraseProtocol2 {}
 
 extension RedBlackTreeMultiset {
   @inlinable @inline(__always)
@@ -90,6 +90,7 @@ extension RedBlackTreeMultiset {
 }
 
 extension RedBlackTreeMultiset: RedBlackTreeSetUtil {}
+extension RedBlackTreeMultiset: RedBlackTreeRemoveProtocol {}
 
 extension RedBlackTreeMultiset {
   @inlinable
@@ -103,15 +104,6 @@ extension RedBlackTreeMultiset {
   public mutating func remove(_ p: Element) -> Bool {
     return __erase_multi(p) != 0
   }
-
-  @inlinable
-  @discardableResult
-  public mutating func remove(at ptr: _NodePtr) -> Element? {
-    guard ptr != .end else { return nil }
-    let e = values[ptr]
-    _ = erase(ptr)
-    return e
-  }
 }
 
 // Sequenceプロトコルとの衝突があるため、直接の実装が必要
@@ -122,12 +114,10 @@ extension RedBlackTreeMultiset {
   @inlinable public func max() -> Element? { _max() }
 }
 
-extension RedBlackTreeMultiset: Sequence {
-
-  public typealias Iterator = RedBlackTree.Iterator<Self>
+extension RedBlackTreeMultiset: Sequence, RedBlackTreeIteratee {
 
   @inlinable
-  public func makeIterator() -> Iterator {
+  public func makeIterator() -> RedBlackTree.Iterator<Self> {
     .init(container: self, ptr: header.__begin_node)
   }
 }

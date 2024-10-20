@@ -75,7 +75,6 @@ extension RedBlackTreeSet: _UnsafeMutatingHandleBase {
 }
 
 extension RedBlackTreeSet: InsertUniqueProtocol {}
-extension RedBlackTreeSet: EraseProtocol {}
 
 extension RedBlackTreeSet {
 
@@ -120,6 +119,7 @@ extension RedBlackTreeSet {
 }
 
 extension RedBlackTreeSet: RedBlackTreeSetUtil {}
+extension RedBlackTreeSet: RedBlackTreeRemoveProtocol {}
 
 extension RedBlackTreeSet {
 
@@ -134,15 +134,6 @@ extension RedBlackTreeSet {
   public mutating func remove(_ p: Element) -> Bool {
     __erase_unique(p)
   }
-
-  @inlinable
-  @discardableResult
-  public mutating func remove(at ptr: _NodePtr) -> Element? {
-    guard ptr != .end else { return nil }
-    let e = values[ptr]
-    _ = erase(ptr)
-    return e
-  }
 }
 
 // Sequenceプロトコルとの衝突があるため、直接の実装が必要
@@ -153,12 +144,10 @@ extension RedBlackTreeSet {
   @inlinable public func max() -> Element? { _max() }
 }
 
-extension RedBlackTreeSet: Sequence {
-
-  public typealias Iterator = RedBlackTree.Iterator<Self>
+extension RedBlackTreeSet: Sequence, RedBlackTreeIteratee {
 
   @inlinable
-  public func makeIterator() -> Iterator {
+  public func makeIterator() -> RedBlackTree.Iterator<Self> {
     .init(container: self, ptr: header.__begin_node)
   }
 }
