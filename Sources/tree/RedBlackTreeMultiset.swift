@@ -75,4 +75,6 @@ extension RedBlackTreeMultiset: _UnsafeMutatingHandleBase {
 }
 
 extension RedBlackTreeMultiset: InsertMultiProtocol {}
-extension RedBlackTreeMultiset: EraseProtocol {}
+extension RedBlackTreeMultiset: EraseProtocol & EraseProtocol2 {
+  
+}

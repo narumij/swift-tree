@@ -98,3 +98,6 @@ extension EndProtocol {
 protocol SizeProtocol {
   var size: Int { get nonmutating set }
 }
+
+@usableFromInline
+protocol EqualProtocol: ValueProtocol, RootProtocol, EndNodeProtocol { }

@@ -1,6 +1,7 @@
 import Foundation
 
 extension RedBlackTreeSet {
+
   @inlinable @inline(__always)
   public init<S>(_ _a: S) where S: Collection, S.Element == Element {
     var _values: [Element] = _a + []
@@ -39,47 +40,26 @@ extension RedBlackTreeSet {
     self.header = _header
     self.values = _values
   }
-
-  @inlinable
-  public var count: Int { header.size }
-
-  @inlinable
-  public var isEmpty: Bool { count == 0 }
 }
 
 extension RedBlackTreeSet: RedBlackTreeSetUtil {}
 
 extension RedBlackTreeSet {
+  
   @inlinable
   @discardableResult
   public mutating func insert(_ p: Element) -> Bool {
     __insert_unique(p).__inserted
   }
+  
   @inlinable
   @discardableResult
   public mutating func remove(_ p: Element) -> Bool {
     __erase_unique(p)
   }
-}
-
-// Sequenceプロトコルとの衝突があるため、直接の実装が必要
-extension RedBlackTreeSet {
 
   @inlinable
-  public func contains(_ p: Element) -> Bool { _contains(p) }
-
-  @inlinable
-  public func min() -> Element? { _min() }
-  
-  @inlinable
-  public func max() -> Element? { _max() }
-}
-
-extension RedBlackTreeSet {
-
-  public typealias Pointer = _NodePtr
-
-  @inlinable
+  @discardableResult
   public mutating func remove(at ptr: _NodePtr) -> Element? {
     guard ptr != .end else { return nil }
     let e = values[ptr]
@@ -88,29 +68,18 @@ extension RedBlackTreeSet {
   }
 }
 
+// Sequenceプロトコルとの衝突があるため、直接の実装が必要
+extension RedBlackTreeSet {
+
+  @inlinable public func contains(_ p: Element) -> Bool { _contains(p) }
+  @inlinable public func min() -> Element? { _min() }
+  @inlinable public func max() -> Element? { _max() }
+}
+
 extension RedBlackTreeSet: Sequence {
 
-  public struct Iterator: IteratorProtocol {
-    @inlinable
-    init(container: RedBlackTreeSet<Element>, ptr: _NodePtr) {
-      self.container = container
-      self.ptr = ptr
-    }
-    @usableFromInline
-    let container: RedBlackTreeSet<Element>
-    @usableFromInline
-    var ptr: _NodePtr
-    @inlinable
-    public mutating func next() -> Element? {
-      defer {
-        if ptr != .end {
-          ptr = container._read { $0.__tree_next_iter(ptr) }
-        }
-      }
-      return ptr == .end ? nil : container.values[ptr]
-    }
-  }
-    
+  public typealias Iterator = RedBlackTree.Iterator<Self>
+
   @inlinable
   public func makeIterator() -> Iterator {
     .init(container: self, ptr: header.__begin_node)

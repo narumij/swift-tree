@@ -32,19 +32,33 @@ extension EraseProtocol {
     _ = erase(__i)
     return true
   }
-  
-//  template <class _Tp, class _Compare, class _Allocator>
-//  template <class _Key>
-//  typename __tree<_Tp, _Compare, _Allocator>::size_type
-//  __tree<_Tp, _Compare, _Allocator>::__erase_multi(const _Key& __k) {
-//    pair<iterator, iterator> __p = __equal_range_multi(__k);
-//    size_type __r                = 0;
-//    for (; __p.first != __p.second; ++__r)
-//      __p.first = erase(__p.first);
-//    return __r;
-//  }
+}
+
+@usableFromInline
+protocol EraseProtocol2: EraseProtocol {
+  func __equal_range_multi(_ __k: _Key) -> (_NodePtr, _NodePtr)
+}
+
+extension EraseProtocol2 {
+
+  //  template <class _Tp, class _Compare, class _Allocator>
+  //  template <class _Key>
+  //  typename __tree<_Tp, _Compare, _Allocator>::size_type
+  //  __tree<_Tp, _Compare, _Allocator>::__erase_multi(const _Key& __k) {
+  //    pair<iterator, iterator> __p = __equal_range_multi(__k);
+  //    size_type __r                = 0;
+  //    for (; __p.first != __p.second; ++__r)
+  //      __p.first = erase(__p.first);
+  //    return __r;
+  //  }
   @inlinable
-  mutating func __erase_multi(_ __k: _Key) {
-    
+  mutating func __erase_multi(_ __k: _Key) -> Int {
+    var __p = __equal_range_multi(__k)
+    var __r = 0
+    while __p.0 != __p.1 {
+      defer { __r += 1 }
+      __p.0 = erase(__p.0)
+    }
+    return __r
   }
 }

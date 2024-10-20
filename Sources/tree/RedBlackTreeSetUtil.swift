@@ -1,14 +1,52 @@
-//
-//  RedBlackTreeSetUtil.swift
-//  swift-tree
-//
-//  Created by narumij on 2024/10/20.
-//
-
 @usableFromInline
 protocol RedBlackTreeSetUtil: ValueComparer
 where Element == _Key, Element: Equatable {
   func _read<R>(_ body: (_UnsafeHandle<Self>) throws -> R) rethrows -> R
+}
+
+extension RedBlackTreeSetUtil {
+  public typealias Pointer = _NodePtr
+}
+
+extension RedBlackTreeSetUtil {
+  
+  @inlinable
+  public func _contains(_ p: Element) -> Bool {
+    _read {
+      let it = $0.__lower_bound(p, $0.__root(), $0.__left_)
+      guard it >= 0 else { return false }
+      return $0.__value_ptr[it] == p
+    }
+  }
+
+  @inlinable
+  func _min() -> Element? {
+    _read {
+      let p = $0.__tree_min($0.__root())
+      return p == .end ? nil : $0.__value_(p)
+    }
+  }
+  
+  @inlinable
+  func _max() -> Element? {
+    _read {
+      let p = $0.__tree_max($0.__root())
+      return p == .end ? nil : $0.__value_(p)
+    }
+  }
+}
+
+extension RedBlackTreeSetUtil {
+
+  @inlinable
+  public func lower_bound(_ p: Element) -> _NodePtr {
+    _read { $0.__lower_bound(p, $0.__root(), .end) }
+  }
+  
+  @inlinable
+  public func upper_bound(_ p: Element) -> _NodePtr {
+    _read { $0.__upper_bound(p, $0.__root(), .end) }
+  }
 }
 
 extension RedBlackTreeSetUtil {
@@ -61,45 +99,3 @@ extension RedBlackTreeSetUtil {
   }
 }
 
-extension RedBlackTreeSetUtil {
-  
-  public typealias Pointer = _NodePtr
-  
-  @inlinable
-  public func lower_bound(_ p: Element) -> _NodePtr {
-    _read { $0.__lower_bound(p, $0.__root(), .end) }
-  }
-  
-  @inlinable
-  public func upper_bound(_ p: Element) -> _NodePtr {
-    _read { $0.__upper_bound(p, $0.__root(), .end) }
-  }
-}
-
-extension RedBlackTreeSetUtil {
-  
-  @inlinable
-  public func _contains(_ p: Element) -> Bool {
-    _read {
-      let it = $0.__lower_bound(p, $0.__root(), $0.__left_)
-      guard it >= 0 else { return false }
-      return $0.__value_ptr[it] == p
-    }
-  }
-
-  @inlinable
-  func _min() -> Element? {
-    _read {
-      let p = $0.__tree_min($0.__root())
-      return p == .end ? nil : $0.__value_(p)
-    }
-  }
-  
-  @inlinable
-  func _max() -> Element? {
-    _read {
-      let p = $0.__tree_max($0.__root())
-      return p == .end ? nil : $0.__value_(p)
-    }
-  }
-}

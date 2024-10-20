@@ -60,6 +60,12 @@ extension _UnsafeHandleBase {
   func find(_ __v: VC._Key) -> _NodePtr {
     _read { $0.find(__v) }
   }
+  
+  @inlinable
+  func
+  __equal_range_multi(_ __k: VC._Key) -> (_NodePtr, _NodePtr) {
+    _read { $0.__equal_range_multi(__k) }
+  }
 }
 
 extension _UnsafeHandle {

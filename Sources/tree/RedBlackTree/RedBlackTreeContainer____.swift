@@ -30,6 +30,12 @@ extension RedBlackTreeContainer____ {
 extension RedBlackTreeContainer____ {
 
   @inlinable
+  public var count: Int { header.size }
+
+  @inlinable
+  public var isEmpty: Bool { count == 0 }
+
+  @inlinable
   public func begin() -> _NodePtr {
     header.__begin_node
   }
@@ -81,7 +87,6 @@ extension RedBlackTreeContainer {
       _read { $0.distance(to: ptr) }
     }
   #endif
-
 }
 
 @usableFromInline
@@ -109,3 +114,26 @@ extension RedBlackTreeSetContainer {
     #endif
   }
 }
+
+public
+  protocol RedBlackTreeIteratee
+{
+  associatedtype Element
+  func iteratorNext(ptr: _NodePtr) -> _NodePtr
+  func iteratorValue(ptr: _NodePtr) -> Element
+}
+
+extension RedBlackTreeSetContainer {
+
+  public func iteratorNext(ptr: _NodePtr) -> _NodePtr {
+    _read { $0.__tree_next_iter(ptr) }
+  }
+
+  public func iteratorValue(ptr: _NodePtr) -> Element {
+    values[ptr]
+  }
+}
+
+extension RedBlackTreeSet: RedBlackTreeIteratee {}
+
+extension RedBlackTreeMultiset: RedBlackTreeIteratee {}
