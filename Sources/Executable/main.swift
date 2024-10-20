@@ -12,7 +12,7 @@ for i in 0 ..< 1_000_000 {
     _ = tree.__insert_unique(i)
 }
 #else
-var tree = RedBlackTree.Container<Int>(0 ..< 1_000_000)
+var tree = RedBlackTreeSet<Int>(0 ..< 1_000_000)
 #endif
 print("Hola!")
 

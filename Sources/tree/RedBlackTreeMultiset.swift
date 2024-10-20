@@ -52,24 +52,8 @@ extension RedBlackTreeMultiset: ValueComparer {
   }
 }
 
-extension RedBlackTreeMultiset: _UnsafeHandleBase {
-
-  @inlinable
-  @inline(__always)
-  func _read<R>(_ body: (_UnsafeHandle<Self>) throws -> R) rethrows -> R {
-    return try withUnsafePointer(to: header) { header in
-      try nodes.withUnsafeBufferPointer { nodes in
-        try values.withUnsafeBufferPointer { values in
-          try body(
-            _UnsafeHandle<Self>(
-              __header_ptr: header,
-              __node_ptr: nodes.baseAddress!,
-              __value_ptr: values.baseAddress!))
-        }
-      }
-    }
-  }
-}
+extension RedBlackTreeMultiset: RedBlackTreeSetContainer { }
+extension RedBlackTreeMultiset: _UnsafeHandleBase { }
 
 extension RedBlackTreeMultiset: _UnsafeMutatingHandleBase {
 
@@ -87,29 +71,6 @@ extension RedBlackTreeMultiset: _UnsafeMutatingHandleBase {
         }
       }
     }
-  }
-}
-
-extension RedBlackTreeMultiset {
-
-  @inlinable
-  mutating func __construct_node(_ k: Element) -> _NodePtr {
-    #if false
-      if let stock = stock.popLast() {
-        return stock
-      }
-    #endif
-    let n = Swift.min(nodes.count, values.count)
-    nodes.append(.zero)
-    values.append(k)
-    return n
-  }
-
-  @inlinable
-  mutating func destroy(_ p: _NodePtr) {
-    #if false
-      stock.append(p)
-    #endif
   }
 }
 

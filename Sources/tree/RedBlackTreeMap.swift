@@ -7,6 +7,7 @@ public
   static func value_comp(_ a: Key, _ b: Key) -> Bool
 }
 
+@frozen
 public
   enum KeyInfo<Key: Comparable>: RedBlackTreeMapKeyProtocol
 {
@@ -22,6 +23,7 @@ public
 public
   typealias RedBlackTreeMap<Key: Comparable, Value> = RedBlackTreeMapBase<KeyInfo<Key>, Value>
 
+@frozen
 public struct RedBlackTreeMapBase<KeyInfo, Value>
 where KeyInfo: RedBlackTreeMapKeyProtocol  //, KeyInfo.Key: Equatable
 {
@@ -86,24 +88,7 @@ extension RedBlackTreeMapBase: ValueComparer {
   }
 }
 
-extension RedBlackTreeMapBase: _UnsafeHandleBase {
-
-  @inlinable
-  @inline(__always)
-  func _read<R>(_ body: (_UnsafeHandle<Self>) throws -> R) rethrows -> R {
-    return try withUnsafePointer(to: header) { header in
-      try nodes.withUnsafeBufferPointer { nodes in
-        try values.withUnsafeBufferPointer { values in
-          try body(
-            _UnsafeHandle<Self>(
-              __header_ptr: header,
-              __node_ptr: nodes.baseAddress!,
-              __value_ptr: values.baseAddress!))
-        }
-      }
-    }
-  }
-}
+extension RedBlackTreeMapBase: RedBlackTreeContainer, _UnsafeHandleBase { }
 
 extension RedBlackTreeMapBase: _UnsafeMutatingHandleBase {
 

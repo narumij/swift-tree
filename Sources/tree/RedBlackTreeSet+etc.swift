@@ -1,14 +1,43 @@
 import Foundation
 
-extension RedBlackTreeMultiset {
+extension RedBlackTreeSet {
   @inlinable @inline(__always)
   public init<S>(_ _a: S) where S: Collection, S.Element == Element {
-    self.nodes = []
-    self.header = .zero
-    self.values = []
-    for a in _a {
-      _ = insert(a)
+    var _values: [Element] = _a + []
+    var _header: RedBlackTree.Header = .zero
+    self.nodes = [RedBlackTree.Node](
+      unsafeUninitializedCapacity: _values.count
+    ) { _nodes, initializedCount in
+      withUnsafeMutablePointer(to: &_header) { _header in
+        _values.withUnsafeMutableBufferPointer { _values in
+          var count = 0
+          func ___construct_node(_ __k: Element) -> _NodePtr {
+            _nodes[count] = .zero
+            _values[count] = __k
+            defer { count += 1 }
+            return count
+          }
+          let tree = _UnsafeMutatingHandle<Self>(
+            __header_ptr: _header,
+            __node_ptr: _nodes.baseAddress!,
+            __value_ptr: _values.baseAddress!)
+          var i = 0
+          while i < _a.count {
+            let __k = _values[i]
+            i += 1
+            var __parent = _NodePtr.nullptr
+            let __child = tree.__find_equal(&__parent, __k)
+            if tree.__ref_(__child) == .nullptr {
+              let __h = ___construct_node(__k)
+              tree.__insert_node_at(__parent, __child, __h)
+            }
+          }
+          initializedCount = count
+        }
+      }
     }
+    self.header = _header
+    self.values = _values
   }
 
   @inlinable
@@ -18,13 +47,13 @@ extension RedBlackTreeMultiset {
   public var isEmpty: Bool { count == 0 }
 }
 
-extension RedBlackTreeMultiset: RedBlackTreeSetUtil {}
+extension RedBlackTreeSet: RedBlackTreeSetUtil {}
 
-extension RedBlackTreeMultiset {
+extension RedBlackTreeSet {
   @inlinable
+  @discardableResult
   public mutating func insert(_ p: Element) -> Bool {
-    _ = __insert_multi(p)
-    return true
+    __insert_unique(p).__inserted
   }
   @inlinable
   @discardableResult
@@ -34,7 +63,7 @@ extension RedBlackTreeMultiset {
 }
 
 // Sequenceプロトコルとの衝突があるため、直接の実装が必要
-extension RedBlackTreeMultiset {
+extension RedBlackTreeSet {
 
   @inlinable
   public func contains(_ p: Element) -> Bool {
@@ -61,7 +90,7 @@ extension RedBlackTreeMultiset {
   }
 }
 
-extension RedBlackTreeMultiset {
+extension RedBlackTreeSet {
 
   public typealias Pointer = _NodePtr
 
@@ -78,16 +107,16 @@ extension RedBlackTreeMultiset {
   }
 }
 
-extension RedBlackTreeMultiset: Sequence {
+extension RedBlackTreeSet: Sequence {
 
   public struct Iterator: IteratorProtocol {
     @inlinable
-    init(container: RedBlackTreeMultiset<Element>, ptr: _NodePtr) {
+    init(container: RedBlackTreeSet<Element>, ptr: _NodePtr) {
       self.container = container
       self.ptr = ptr
     }
     @usableFromInline
-    let container: RedBlackTreeMultiset<Element>
+    let container: RedBlackTreeSet<Element>
     @usableFromInline
     var ptr: _NodePtr
     @inlinable
@@ -107,7 +136,7 @@ extension RedBlackTreeMultiset: Sequence {
   }
 }
 
-extension RedBlackTreeMultiset: ExpressibleByArrayLiteral {
+extension RedBlackTreeSet: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }

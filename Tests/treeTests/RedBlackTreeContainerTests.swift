@@ -8,7 +8,7 @@
 import XCTest
 @testable import tree
 
-extension RedBlackTree.Container {
+extension RedBlackTreeSet {
     
     @inlinable
     var _count: Int {
@@ -79,7 +79,7 @@ extension RedBlackTree.Container {
 
 final class RedBlackTreeContainerTests: XCTestCase {
     
-    func fixtureEmpty(_ tree: inout RedBlackTree.Container<Int>) {
+    func fixtureEmpty(_ tree: inout RedBlackTreeSet<Int>) {
         tree.nodes = [
         ]
         print(tree.nodes.graphviz())
@@ -87,7 +87,7 @@ final class RedBlackTreeContainerTests: XCTestCase {
         XCTAssertTrue(tree.__tree_invariant(tree.__root()))
     }
 
-    func fixture0_10_20(_ tree: inout RedBlackTree.Container<Int>) {
+    func fixture0_10_20(_ tree: inout RedBlackTreeSet<Int>) {
         tree.nodes = [
             .init(__is_black_: true,  __left_: 1,   __right_: 2  , __parent_: .end),
             .init(__is_black_: false, __left_: nil, __right_: nil, __parent_: 0   ),
@@ -103,7 +103,7 @@ final class RedBlackTreeContainerTests: XCTestCase {
         XCTAssertTrue(tree.__tree_invariant(tree.__root()))
     }
     
-    func fixture0_1_2_3_4_5_6(_ tree: inout RedBlackTree.Container<Int>) {
+    func fixture0_1_2_3_4_5_6(_ tree: inout RedBlackTreeSet<Int>) {
         tree.nodes = [
             .init(__is_black_:  true, __left_:   1, __right_:   4, __parent_: .end),
             .init(__is_black_: false, __left_:   2, __right_:   3, __parent_:    0),
@@ -139,7 +139,7 @@ final class RedBlackTreeContainerTests: XCTestCase {
 
     func testRootInvaliant() throws {
         
-        var tree = RedBlackTree.Container<Int>()
+        var tree = RedBlackTreeSet<Int>()
         XCTAssertTrue(tree.__tree_invariant(tree.__root()))
 
         tree.nodes = [
@@ -165,14 +165,14 @@ final class RedBlackTreeContainerTests: XCTestCase {
     
     func testFixtures() {
         
-        var tree = RedBlackTree.Container<Int>()
+        var tree = RedBlackTreeSet<Int>()
         fixtureEmpty(&tree)
         fixture0_10_20(&tree)
         fixture0_1_2_3_4_5_6(&tree)
     }
     
     func testMin() {
-        var tree = RedBlackTree.Container<Int>()
+        var tree = RedBlackTreeSet<Int>()
         fixture0_10_20(&tree)
         XCTAssertEqual(tree.__tree_min(tree.__root()), 1)
         fixture0_1_2_3_4_5_6(&tree)
@@ -180,7 +180,7 @@ final class RedBlackTreeContainerTests: XCTestCase {
     }
 
     func testMax() {
-        var tree = RedBlackTree.Container<Int>()
+        var tree = RedBlackTreeSet<Int>()
         fixture0_10_20(&tree)
         XCTAssertEqual(tree.__tree_max(tree.__root()), 2)
         fixture0_1_2_3_4_5_6(&tree)
@@ -188,7 +188,7 @@ final class RedBlackTreeContainerTests: XCTestCase {
     }
     
     func testRotate() throws {
-        var tree = RedBlackTree.Container<Int>()
+        var tree = RedBlackTreeSet<Int>()
 
         tree.nodes = [
             .init(__is_black_:  true, __left_:   1, __right_:   2, __parent_: .end),
@@ -226,7 +226,7 @@ final class RedBlackTreeContainerTests: XCTestCase {
     }
     
     func testBalancing0() throws {
-        var tree = RedBlackTree.Container<Int>()
+        var tree = RedBlackTreeSet<Int>()
         fixtureEmpty(&tree)
         tree.__left_ = .node(tree.nodes.count)
         tree.nodes.append(.init(__is_black_: false, __left_: nil, __right_: nil, __parent_: .end))
@@ -242,7 +242,7 @@ final class RedBlackTreeContainerTests: XCTestCase {
 
     func testRemove3() throws {
         
-        var tree = RedBlackTree.Container<Int>()
+        var tree = RedBlackTreeSet<Int>()
         _ = tree.__insert_unique(0)
         _ = tree.__insert_unique(1)
         _ = tree.__insert_unique(2)
@@ -259,7 +259,7 @@ final class RedBlackTreeContainerTests: XCTestCase {
 
     func testRemove2() throws {
         
-        var tree = RedBlackTree.Container<Int>()
+        var tree = RedBlackTreeSet<Int>()
         for i in 0..<2 {
             _ = tree.__insert_unique(i)
         }
@@ -278,7 +278,7 @@ final class RedBlackTreeContainerTests: XCTestCase {
 
     func testRemove7() throws {
         
-        var tree = RedBlackTree.Container<Int>()
+        var tree = RedBlackTreeSet<Int>()
         for i in 0..<7 {
             _ = tree.__insert_unique(i)
         }
@@ -296,7 +296,7 @@ final class RedBlackTreeContainerTests: XCTestCase {
     }
     
     func testFindEqual0() throws {
-        var tree = RedBlackTree.Container<Int>()
+        var tree = RedBlackTreeSet<Int>()
         fixtureEmpty(&tree)
         do {
             var __parent: _NodePtr = .nullptr
@@ -316,7 +316,7 @@ final class RedBlackTreeContainerTests: XCTestCase {
     }
     
     func testFindEqual1() throws {
-        var tree = RedBlackTree.Container<Int>()
+        var tree = RedBlackTreeSet<Int>()
         fixture0_10_20(&tree)
         do {
             var __parent: _NodePtr = .nullptr
@@ -378,7 +378,7 @@ final class RedBlackTreeContainerTests: XCTestCase {
     
     func testInsert0() throws {
         
-        var tree = RedBlackTree.Container<Int>()
+        var tree = RedBlackTreeSet<Int>()
         fixtureEmpty(&tree)
         for i in 0 ..< 10000 {
             XCTAssertTrue(tree.__insert_unique(i).__inserted)
@@ -393,7 +393,7 @@ final class RedBlackTreeContainerTests: XCTestCase {
         // 分解前 1.04 sec
         // 分解後 1.82 sec (ただしリリースビルドでの速度変化なし)
         
-        var tree = RedBlackTree.Container<Int>()
+        var tree = RedBlackTreeSet<Int>()
         fixtureEmpty(&tree)
         tree.reserveCapacity(1_000_000)
 
