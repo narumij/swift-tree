@@ -37,28 +37,13 @@ extension RedBlackTreeMultiset {
 extension RedBlackTreeMultiset {
 
   @inlinable
-  public func contains(_ p: Element) -> Bool {
-    _read {
-      let it = $0.__lower_bound(p, $0.__root(), $0.__left_)
-      guard it >= 0 else { return false }
-      return $0.__value_ptr[it] == p
-    }
-  }
+  public func contains(_ p: Element) -> Bool { _contains(p) }
 
   @inlinable
-  func min() -> Element? {
-    _read {
-      let p = $0.__tree_min($0.__root())
-      return p == .end ? nil : $0.__value_(p)
-    }
-  }
+  public func min() -> Element? { _min() }
+  
   @inlinable
-  func max() -> Element? {
-    _read {
-      let p = $0.__tree_max($0.__root())
-      return p == .end ? nil : $0.__value_(p)
-    }
-  }
+  public func max() -> Element? { _max() }
 }
 
 extension RedBlackTreeMultiset {
@@ -71,10 +56,6 @@ extension RedBlackTreeMultiset {
     let e = values[ptr]
     _ = erase(ptr)
     return e
-  }
-
-  @inlinable func pointer(_ ptr: _NodePtr, offsetBy distance: Int) -> _NodePtr {
-    _read { $0.pointer(ptr, offsetBy: distance) }
   }
 }
 

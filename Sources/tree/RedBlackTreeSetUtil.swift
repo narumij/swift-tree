@@ -76,3 +76,30 @@ extension RedBlackTreeSetUtil {
   }
 }
 
+extension RedBlackTreeSetUtil {
+  
+  @inlinable
+  public func _contains(_ p: Element) -> Bool {
+    _read {
+      let it = $0.__lower_bound(p, $0.__root(), $0.__left_)
+      guard it >= 0 else { return false }
+      return $0.__value_ptr[it] == p
+    }
+  }
+
+  @inlinable
+  func _min() -> Element? {
+    _read {
+      let p = $0.__tree_min($0.__root())
+      return p == .end ? nil : $0.__value_(p)
+    }
+  }
+  
+  @inlinable
+  func _max() -> Element? {
+    _read {
+      let p = $0.__tree_max($0.__root())
+      return p == .end ? nil : $0.__value_(p)
+    }
+  }
+}

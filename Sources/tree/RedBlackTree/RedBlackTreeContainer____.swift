@@ -1,15 +1,15 @@
 import Foundation
 
 @usableFromInline
-protocol RedBlackTreeContainer: EndProtocol, ValueComparer {
+protocol RedBlackTreeContainer____: EndProtocol, ValueComparer {
   associatedtype Element
   var header: RedBlackTree.Header { get set }
   var nodes: [RedBlackTree.Node] { get set }
   var values: [Element] { get set }
 }
 
-extension RedBlackTreeContainer {
-  
+extension RedBlackTreeContainer____ {
+
   @inlinable
   @inline(__always)
   func _read<R>(_ body: (_UnsafeHandle<Self>) throws -> R) rethrows -> R {
@@ -27,13 +27,13 @@ extension RedBlackTreeContainer {
   }
 }
 
-extension RedBlackTreeContainer {
-  
+extension RedBlackTreeContainer____ {
+
   @inlinable
   public func begin() -> _NodePtr {
     header.__begin_node
   }
-  
+
   @inlinable
   public func end() -> _NodePtr {
     .end
@@ -41,17 +41,15 @@ extension RedBlackTreeContainer {
 }
 
 @usableFromInline
-protocol RedBlackTreeContainer__: RedBlackTreeContainer {
-  func pointer(_ ptr: _NodePtr, offsetBy distance: Int) -> _NodePtr
-}
+protocol RedBlackTreeContainer: RedBlackTreeContainer____ {}
 
-extension RedBlackTreeContainer__ {
-  
+extension RedBlackTreeContainer {
+
   @inlinable
   public subscript(node: _NodePtr) -> Element {
     values[node]
   }
-  
+
   @inlinable public subscript(node: _NodePtr, offsetBy distance: Int) -> Element {
     element(node, offsetBy: distance)!
   }
@@ -60,33 +58,37 @@ extension RedBlackTreeContainer__ {
     let ptr = pointer(ptr, offsetBy: distance)
     return ptr == .end ? nil : values[ptr]
   }
-  
-#if DEBUG
-  @inlinable
-  var elements: [Element] {
-    var result: [Element] = []
-    var p = header.__begin_node
-    _read {
-      while p != .end {
-        result.append($0.__value_(p))
-        p = $0.__tree_next_iter(p)
-      }
-    }
-    return result
+
+  @inlinable func pointer(_ ptr: _NodePtr, offsetBy distance: Int) -> _NodePtr {
+    _read { $0.pointer(ptr, offsetBy: distance) }
   }
 
-  func distance(to ptr: _NodePtr) -> Int {
-    _read { $0.distance(to: ptr) }
-  }
-#endif
+  #if DEBUG
+    @inlinable
+    var elements: [Element] {
+      var result: [Element] = []
+      var p = header.__begin_node
+      _read {
+        while p != .end {
+          result.append($0.__value_(p))
+          p = $0.__tree_next_iter(p)
+        }
+      }
+      return result
+    }
+
+    func distance(to ptr: _NodePtr) -> Int {
+      _read { $0.distance(to: ptr) }
+    }
+  #endif
 
 }
 
 @usableFromInline
-protocol RedBlackTreeSetContainer: RedBlackTreeContainer__ { }
+protocol RedBlackTreeSetContainer: RedBlackTreeContainer {}
 
 extension RedBlackTreeSetContainer {
-  
+
   @inlinable
   mutating func __construct_node(_ k: Element) -> _NodePtr {
     #if false
@@ -107,4 +109,3 @@ extension RedBlackTreeSetContainer {
     #endif
   }
 }
-

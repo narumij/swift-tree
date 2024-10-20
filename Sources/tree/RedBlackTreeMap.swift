@@ -88,7 +88,7 @@ extension RedBlackTreeMapBase: ValueComparer {
   }
 }
 
-extension RedBlackTreeMapBase: RedBlackTreeContainer, _UnsafeHandleBase { }
+extension RedBlackTreeMapBase: RedBlackTreeContainer____, _UnsafeHandleBase { }
 
 extension RedBlackTreeMapBase: _UnsafeMutatingHandleBase {
 
