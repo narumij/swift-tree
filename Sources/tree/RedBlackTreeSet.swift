@@ -3,6 +3,9 @@ import Foundation
 @frozen
 public struct RedBlackTreeSet<Element: Comparable> {
 
+  public
+  typealias Element = Element
+  
   @usableFromInline
   typealias _Key = Element
 

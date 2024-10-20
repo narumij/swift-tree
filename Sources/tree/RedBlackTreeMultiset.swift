@@ -1,7 +1,12 @@
 import Foundation
 
+// AC https://atcoder.jp/contests/abc358/submissions/59018223
+
 @frozen
 public struct RedBlackTreeMultiset<Element: Comparable> {
+
+  public
+  typealias Element = Element
 
   @usableFromInline
   typealias _Key = Element
