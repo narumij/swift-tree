@@ -7,6 +7,8 @@
 
 #if DEBUG
 import XCTest
+import Foundation
+
 @testable import RedBlackTreeModule
 
 extension RedBlackTreeSet {
@@ -312,22 +314,22 @@ final class RedBlackTreeSetTests: XCTestCase {
         var set = RedBlackTreeSet<Int>([0,1,2,3,4])
         XCTAssertEqual(set._count, 5)
         XCTAssertEqual(set.left(-1).index, 0)
-      XCTAssertEqual(set.elements.count(where: { $0 < -1 }), 0)
+        XCTAssertEqual(set.elements.count{ $0 < -1 }, 0)
         XCTAssertEqual(set.left(0).index, 0)
-        XCTAssertEqual(set.elements.count(where: { $0 < 0 }), 0)
+        XCTAssertEqual(set.elements.count{ $0 < 0 }, 0)
         XCTAssertEqual(set.left(1).index, 1)
-        XCTAssertEqual(set.elements.count(where: { $0 < 1 }), 1)
+        XCTAssertEqual(set.elements.count{ $0 < 1 }, 1)
         XCTAssertEqual(set.left(2).index, 2)
         XCTAssertEqual(set.left(3).index, 3)
         XCTAssertEqual(set.left(4).index, 4)
         XCTAssertEqual(set.left(5).index, 5)
         XCTAssertEqual(set.left(6).index, 5)
         XCTAssertEqual(set.right(-1).index, 0)
-        XCTAssertEqual(set.elements.count(where: { $0 <= -1 }), 0)
+        XCTAssertEqual(set.elements.count{ $0 <= -1 }, 0)
         XCTAssertEqual(set.right(0).index, 1)
-        XCTAssertEqual(set.elements.count(where: { $0 <= 0 }), 1)
+        XCTAssertEqual(set.elements.count{ $0 <= 0 }, 1)
         XCTAssertEqual(set.right(1).index, 2)
-        XCTAssertEqual(set.elements.count(where: { $0 <= 1 }), 2)
+        XCTAssertEqual(set.elements.count{ $0 <= 1 }, 2)
         XCTAssertEqual(set.right(2).index, 3)
         XCTAssertEqual(set.right(3).index, 4)
         XCTAssertEqual(set.right(4).index, 5)
