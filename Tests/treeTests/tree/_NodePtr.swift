@@ -18,7 +18,7 @@ extension _NodePtr {
     var index: Int! { self }
 }
 
-extension _NodePtr: @retroactive ExpressibleByNilLiteral {
+extension _NodePtr: ExpressibleByNilLiteral {
     public init(nilLiteral: ()) {
         self = .nullptr
     }
