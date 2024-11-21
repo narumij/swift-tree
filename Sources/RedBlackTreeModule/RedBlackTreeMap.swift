@@ -117,6 +117,9 @@ extension RedBlackTreeMapBase: InsertUniqueProtocol, EraseProtocol {
 
   @inlinable
   mutating func __construct_node(_ k: (Key, Value)) -> _NodePtr {
+    if let stock = stock.popMin() {
+      return stock
+    }
     let n = Swift.min(nodes.count, values.count)
     nodes.append(.zero)
     values.append(k)
@@ -125,6 +128,6 @@ extension RedBlackTreeMapBase: InsertUniqueProtocol, EraseProtocol {
 
   @inlinable
   mutating func destroy(_ p: _NodePtr) {
-    //    fatalError()
+    stock.insert(p)
   }
 }
