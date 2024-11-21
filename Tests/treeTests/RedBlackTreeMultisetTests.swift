@@ -387,22 +387,22 @@
       var set = RedBlackTreeMultiset<Int>([0, 1, 2, 3, 4])
       XCTAssertEqual(set._count, 5)
       XCTAssertEqual(set.left(-1).index, 0)
-//      XCTAssertEqual(set.elements.count { $0 < -1 }, 0)
+      //      XCTAssertEqual(set.elements.count { $0 < -1 }, 0)
       XCTAssertEqual(set.left(0).index, 0)
-//      XCTAssertEqual(set.elements.count { $0 < 0 }, 0)
+      //      XCTAssertEqual(set.elements.count { $0 < 0 }, 0)
       XCTAssertEqual(set.left(1).index, 1)
-//      XCTAssertEqual(set.elements.count { $0 < 1 }, 1)
+      //      XCTAssertEqual(set.elements.count { $0 < 1 }, 1)
       XCTAssertEqual(set.left(2).index, 2)
       XCTAssertEqual(set.left(3).index, 3)
       XCTAssertEqual(set.left(4).index, 4)
       XCTAssertEqual(set.left(5).index, 5)
       XCTAssertEqual(set.left(6).index, 5)
       XCTAssertEqual(set.right(-1).index, 0)
-//      XCTAssertEqual(set.elements.count { $0 <= -1 }, 0)
+      //      XCTAssertEqual(set.elements.count { $0 <= -1 }, 0)
       XCTAssertEqual(set.right(0).index, 1)
-//      XCTAssertEqual(set.elements.count { $0 <= 0 }, 1)
+      //      XCTAssertEqual(set.elements.count { $0 <= 0 }, 1)
       XCTAssertEqual(set.right(1).index, 2)
-//      XCTAssertEqual(set.elements.count { $0 <= 1 }, 2)
+      //      XCTAssertEqual(set.elements.count { $0 <= 1 }, 2)
       XCTAssertEqual(set.right(2).index, 3)
       XCTAssertEqual(set.right(3).index, 4)
       XCTAssertEqual(set.right(4).index, 5)
@@ -524,5 +524,11 @@
         XCTAssertTrue(set._read { $0.__tree_invariant($0.__root()) })
       }
     }
+
+    func testLiteral() throws {
+      let set: RedBlackTreeMultiset<Int> = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5]
+      XCTAssertEqual(set.map { $0 }, [1, 1, 2, 2, 3, 3, 4, 4, 5, 5])
+    }
+
   }
 #endif
