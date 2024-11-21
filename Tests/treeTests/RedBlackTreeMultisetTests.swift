@@ -9,6 +9,8 @@
 import XCTest
 @testable import RedBlackTreeModule
 
+#if os(macOS) || os(iOS)
+
 extension RedBlackTreeMultiset {
     
     @inlinable
@@ -519,4 +521,6 @@ final class RedBlackTreeMultisetTests: XCTestCase {
         }
     }
 }
+#endif
+
 #endif
