@@ -1,5 +1,5 @@
 import Foundation
-@testable import tree
+@testable import RedBlackTreeModule
 
 extension Collection where Element == RedBlackTree.Node, Index == Int {
     

@@ -1,5 +1,5 @@
 import Foundation
-@testable import tree
+@testable import RedBlackTreeModule
 
 // 書いてみたけれども、
 // よくよく考えるとサイズが小さいと

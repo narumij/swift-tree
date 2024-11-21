@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import tree
+@testable import RedBlackTreeModule
 
 extension RedBlackTree.Node {
     static var node: Self {

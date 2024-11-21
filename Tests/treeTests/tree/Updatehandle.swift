@@ -1,5 +1,5 @@
 import Foundation
-@testable import tree
+@testable import RedBlackTreeModule
 
 @frozen
 @usableFromInline

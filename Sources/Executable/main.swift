@@ -1,7 +1,7 @@
 // Instrumentsでの計測用の作業コマンド
 
 import Foundation
-import tree
+import RedBlackTreeModule
 
 #if false
 var tree = RedBlackTree.Container<Int>()

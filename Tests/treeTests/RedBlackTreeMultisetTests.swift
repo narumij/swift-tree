@@ -7,7 +7,7 @@
 
 #if DEBUG
 import XCTest
-@testable import tree
+@testable import RedBlackTreeModule
 
 extension RedBlackTreeMultiset {
     

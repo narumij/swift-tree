@@ -9,25 +9,25 @@ let package = Package(
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
             name: "AcCollections",
-            targets: ["AcCollections", "tree"]),
+            targets: ["AcCollections"]),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
-      .testTarget(
+      .target(
           name: "AcCollections",
-          dependencies: ["tree"]
+          dependencies: ["RedBlackTreeModule"]
       ),
         .target(
-            name: "tree"),
+            name: "RedBlackTreeModule"),
         .testTarget(
             name: "treeTests",
-            dependencies: ["tree"]
+            dependencies: ["RedBlackTreeModule"]
         ),
         .executableTarget(
             name: "Executable",
             dependencies: [
-                "tree" ]
+                "RedBlackTreeModule" ]
             )
     ]
 )

@@ -7,7 +7,7 @@
 
 #if DEBUG
 import XCTest
-@testable import tree
+@testable import RedBlackTreeModule
 
 extension RedBlackTreeSet {
     func left(_ p: Element) -> Int { distance(to: lower_bound(p)) }

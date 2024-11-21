@@ -1,5 +1,5 @@
 import Foundation
-import tree
+import RedBlackTreeModule
 
 @usableFromInline
 struct MemoizeCache1<A,B>

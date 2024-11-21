@@ -6,7 +6,7 @@
 //
 
 import XCTest
-import tree
+import RedBlackTreeModule
 
 final class RedBlackTreeMapTests: XCTestCase {
 

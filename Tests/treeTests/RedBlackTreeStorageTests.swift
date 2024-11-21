@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import tree
+@testable import RedBlackTreeModule
 
 typealias RedBlackTreeStorage = RedBlackTree.Storage
 
