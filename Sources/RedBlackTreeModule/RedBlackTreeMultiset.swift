@@ -1,4 +1,5 @@
 import Foundation
+import Collections
 
 // AC https://atcoder.jp/contests/abc358/submissions/59018223
 
@@ -16,6 +17,7 @@ public struct RedBlackTreeMultiset<Element: Comparable> {
     header = .zero
     nodes = []
     values = []
+    stock = []
   }
 
   @inlinable
@@ -23,6 +25,7 @@ public struct RedBlackTreeMultiset<Element: Comparable> {
     header = .zero
     nodes = []
     values = []
+    stock = []
     nodes.reserveCapacity(minimumCapacity)
     values.reserveCapacity(minimumCapacity)
   }
@@ -33,6 +36,8 @@ public struct RedBlackTreeMultiset<Element: Comparable> {
   var nodes: [RedBlackTree.Node]
   @usableFromInline
   var values: [Element]
+  @usableFromInline
+  var stock: Heap<_NodePtr>
 
   #if false
     @usableFromInline
@@ -88,6 +93,7 @@ extension RedBlackTreeMultiset {
     self.nodes = []
     self.header = .zero
     self.values = []
+    self.stock = []
     for a in _a {
       _ = insert(a)
     }

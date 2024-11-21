@@ -1,4 +1,5 @@
 import Foundation
+import Collections
 
 @usableFromInline
 protocol RedBlackTreeContainerBase: EndProtocol, ValueComparer {
@@ -6,6 +7,7 @@ protocol RedBlackTreeContainerBase: EndProtocol, ValueComparer {
   var header: RedBlackTree.Header { get set }
   var nodes: [RedBlackTree.Node] { get set }
   var values: [Element] { get set }
+  var stock: Heap<_NodePtr> { get set }
 }
 
 extension RedBlackTreeContainerBase {
@@ -96,11 +98,9 @@ extension RedBlackTreeSetContainer {
 
   @inlinable
   mutating func __construct_node(_ k: Element) -> _NodePtr {
-    #if false
-      if let stock = stock.popLast() {
-        return stock
-      }
-    #endif
+    if let stock = stock.popMin() {
+      return stock
+    }
     let n = Swift.min(nodes.count, values.count)
     nodes.append(.zero)
     values.append(k)
@@ -109,9 +109,7 @@ extension RedBlackTreeSetContainer {
 
   @inlinable
   mutating func destroy(_ p: _NodePtr) {
-    #if false
-      stock.append(p)
-    #endif
+    stock.insert(p)
   }
 }
 

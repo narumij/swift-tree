@@ -1,4 +1,5 @@
 import Foundation
+import Collections
 
 @frozen
 public struct RedBlackTreeSet<Element: Comparable> {
@@ -14,6 +15,7 @@ public struct RedBlackTreeSet<Element: Comparable> {
     header = .zero
     nodes = []
     values = []
+    stock = []
   }
 
   @inlinable
@@ -21,6 +23,7 @@ public struct RedBlackTreeSet<Element: Comparable> {
     header = .zero
     nodes = []
     values = []
+    stock = []
     nodes.reserveCapacity(minimumCapacity)
     values.reserveCapacity(minimumCapacity)
   }
@@ -31,6 +34,8 @@ public struct RedBlackTreeSet<Element: Comparable> {
   var nodes: [RedBlackTree.Node]
   @usableFromInline
   var values: [Element]
+  @usableFromInline
+  var stock: Heap<_NodePtr>
 
   #if false
     @usableFromInline
@@ -118,6 +123,7 @@ extension RedBlackTreeSet {
     }
     self.header = _header
     self.values = _values
+    self.stock = []
   }
 }
 

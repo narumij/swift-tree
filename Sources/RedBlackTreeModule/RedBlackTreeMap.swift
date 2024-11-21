@@ -1,4 +1,5 @@
 import Foundation
+import Collections
 
 public
   protocol RedBlackTreeMapKeyProtocol
@@ -41,6 +42,7 @@ where KeyInfo: RedBlackTreeMapKeyProtocol  //, KeyInfo.Key: Equatable
     header = .zero
     nodes = []
     values = []
+    stock = []
   }
 
   public subscript(key: Key) -> Value? {
@@ -69,6 +71,8 @@ where KeyInfo: RedBlackTreeMapKeyProtocol  //, KeyInfo.Key: Equatable
   var nodes: [RedBlackTree.Node]
   @usableFromInline
   var values: [Element]
+  @usableFromInline
+  var stock: Heap<_NodePtr>
 
   public var count: Int { header.size }
   public var isEmpty: Bool { count == 0 }
