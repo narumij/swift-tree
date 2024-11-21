@@ -14,8 +14,6 @@ extension RedBlackTreeSet {
     func right(_ p: Element) -> Int { distance(to: upper_bound(p)) }
 }
 
-#if os(macOS) || os(iOS)
-
 final class RedBlackTreeSetTests: XCTestCase {
 
     override func setUpWithError() throws {
@@ -452,6 +450,4 @@ final class RedBlackTreeSetTests: XCTestCase {
         }
     }
 }
-#endif
-
 #endif
