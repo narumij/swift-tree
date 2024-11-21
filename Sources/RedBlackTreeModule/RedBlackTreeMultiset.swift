@@ -99,6 +99,7 @@ extension RedBlackTreeMultiset: RedBlackTreeRemoveProtocol {}
 
 extension RedBlackTreeMultiset {
   @inlinable
+  @discardableResult
   public mutating func insert(_ p: Element) -> Bool {
     _ = __insert_multi(p)
     return true
