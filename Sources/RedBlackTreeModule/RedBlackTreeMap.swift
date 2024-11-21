@@ -131,3 +131,12 @@ extension RedBlackTreeMapBase: InsertUniqueProtocol, EraseProtocol {
     stock.insert(p)
   }
 }
+
+extension RedBlackTreeMapBase: ExpressibleByDictionaryLiteral {
+  public init(dictionaryLiteral elements: (KeyInfo.Key, Value)...) {
+    self.init()
+    for (k,v) in elements {
+      self[k] = v
+    }
+  }
+}
