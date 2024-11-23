@@ -126,7 +126,7 @@ extension RedBlackTreeMultiset {
   @inlinable public func max() -> Element? { _max() }
 }
 
-extension RedBlackTreeMultiset: Sequence, RedBlackTreeIteratee {
+extension RedBlackTreeMultiset: Sequence, RedBlackTree.Iteratee {
 
   @inlinable
   public func makeIterator() -> RedBlackTree.Iterator<Self> {

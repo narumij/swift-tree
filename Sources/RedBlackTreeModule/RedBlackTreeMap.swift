@@ -1,84 +1,91 @@
-import Foundation
 import Collections
+import Foundation
 
-public
-  protocol RedBlackTreeMapKeyProtocol
-{
-  associatedtype Key
-  static func value_comp(_ a: Key, _ b: Key) -> Bool
-}
+extension RedBlackTree {
 
-@frozen
-public
-  enum KeyInfo<Key: Comparable>: RedBlackTreeMapKeyProtocol
-{
-  public typealias Key = Key
-  @inlinable
-  public static func
-    value_comp(_ a: Key, _ b: Key) -> Bool
+  public
+    protocol KeyProtocol
   {
-    a < b
+    associatedtype Key
+    static func value_comp(_ a: Key, _ b: Key) -> Bool
+  }
+
+  @frozen
+  public
+    enum KeyInfo<Key: Comparable>: RedBlackTree.KeyProtocol
+  {
+    public typealias Key = Key
+    @inlinable
+    public static func
+      value_comp(_ a: Key, _ b: Key) -> Bool
+    {
+      a < b
+    }
   }
 }
 
-public
-  typealias RedBlackTreeMap<Key: Comparable, Value> = RedBlackTreeMapBase<KeyInfo<Key>, Value>
+public typealias RedBlackTreeMap<Key: Comparable, Value> = RedBlackTree.MapBase<
+  RedBlackTree.KeyInfo<Key>, Value
+>
 
-@frozen
-public struct RedBlackTreeMapBase<KeyInfo, Value>
-where KeyInfo: RedBlackTreeMapKeyProtocol  //, KeyInfo.Key: Equatable
-{
+extension RedBlackTree {
 
-  public
-    typealias Key = KeyInfo.Key
+  @frozen
+  public struct MapBase<KeyInfo, Value>
+  where KeyInfo: RedBlackTree.KeyProtocol  //, KeyInfo.Key: Equatable
+  {
 
-  public
-    typealias Value = Value
+    public
+      typealias Key = KeyInfo.Key
 
-  @usableFromInline
-  typealias _Key = Key
+    public
+      typealias Value = Value
 
-  public init() {
-    header = .zero
-    nodes = []
-    values = []
-    stock = []
-  }
+    @usableFromInline
+    typealias _Key = Key
 
-  public subscript(key: Key) -> Value? {
-    get {
-      _read {
-        let it = $0.__lower_bound(key, $0.__root(), $0.__left_)
-        guard it >= 0,
-          !Self.value_comp(Self.__key($0.__value_ptr[it]), key),
-          !Self.value_comp(key, Self.__key($0.__value_ptr[it]))
-        else { return nil }
-        return Self.__value($0.__value_ptr[it])
+    public init() {
+      header = .zero
+      nodes = []
+      values = []
+      stock = []
+    }
+
+    public subscript(key: Key) -> Value? {
+      get {
+        _read {
+          let it = $0.__lower_bound(key, $0.__root(), $0.__left_)
+          guard it >= 0,
+            !Self.value_comp(Self.__key($0.__value_ptr[it]), key),
+            !Self.value_comp(key, Self.__key($0.__value_ptr[it]))
+          else { return nil }
+          return Self.__value($0.__value_ptr[it])
+        }
+      }
+      set {
+        if let newValue {
+          _ = __insert_unique((key, newValue))
+        } else {
+          _ = __erase_unique(key)
+        }
       }
     }
-    set {
-      if let newValue {
-        _ = __insert_unique((key, newValue))
-      } else {
-        _ = __erase_unique(key)
-      }
-    }
+
+    @usableFromInline
+    var header: RedBlackTree.Header
+    @usableFromInline
+    var nodes: [RedBlackTree.Node]
+    @usableFromInline
+    var values: [Element]
+    @usableFromInline
+    var stock: Heap<_NodePtr>
+
+    public var count: Int { header.size }
+    public var isEmpty: Bool { count == 0 }
   }
-
-  @usableFromInline
-  var header: RedBlackTree.Header
-  @usableFromInline
-  var nodes: [RedBlackTree.Node]
-  @usableFromInline
-  var values: [Element]
-  @usableFromInline
-  var stock: Heap<_NodePtr>
-
-  public var count: Int { header.size }
-  public var isEmpty: Bool { count == 0 }
 }
 
-extension RedBlackTreeMapBase: ValueComparer {
+extension RedBlackTree.MapBase: ValueComparer {
 
   @inlinable
   static func __key(_ kv: (Key, Value)) -> Key { kv.0 }
@@ -92,9 +99,9 @@ extension RedBlackTreeMapBase: ValueComparer {
   }
 }
 
-extension RedBlackTreeMapBase: RedBlackTreeContainerBase, _UnsafeHandleBase {}
+extension RedBlackTree.MapBase: RedBlackTreeContainerBase, _UnsafeHandleBase {}
 
-extension RedBlackTreeMapBase: _UnsafeMutatingHandleBase {
+extension RedBlackTree.MapBase: _UnsafeMutatingHandleBase {
 
   @inlinable
   @inline(__always)
@@ -113,7 +120,7 @@ extension RedBlackTreeMapBase: _UnsafeMutatingHandleBase {
   }
 }
 
-extension RedBlackTreeMapBase: InsertUniqueProtocol, EraseProtocol {
+extension RedBlackTree.MapBase: InsertUniqueProtocol, EraseProtocol {
 
   @inlinable
   mutating func __construct_node(_ k: (Key, Value)) -> _NodePtr {
@@ -132,10 +139,10 @@ extension RedBlackTreeMapBase: InsertUniqueProtocol, EraseProtocol {
   }
 }
 
-extension RedBlackTreeMapBase: ExpressibleByDictionaryLiteral {
+extension RedBlackTree.MapBase: ExpressibleByDictionaryLiteral {
   public init(dictionaryLiteral elements: (KeyInfo.Key, Value)...) {
     self.init()
-    for (k,v) in elements {
+    for (k, v) in elements {
       self[k] = v
     }
   }

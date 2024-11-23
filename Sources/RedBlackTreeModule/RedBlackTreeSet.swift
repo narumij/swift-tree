@@ -153,7 +153,7 @@ extension RedBlackTreeSet {
   @inlinable public func max() -> Element? { _max() }
 }
 
-extension RedBlackTreeSet: Sequence, RedBlackTreeIteratee {
+extension RedBlackTreeSet: Sequence, RedBlackTree.Iteratee {
 
   @inlinable
   public func makeIterator() -> RedBlackTree.Iterator<Self> {
